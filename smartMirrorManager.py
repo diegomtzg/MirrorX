@@ -13,9 +13,6 @@ small_fontsize = 12
 med_fontsize = 18
 large_fontsize = 28
 xlarge_fontsize = 48
-ui_locale = ''
-time_format = 12
-date_format = "%b %d, %Y"
 
 
 def main():
@@ -27,23 +24,27 @@ def main():
 class mainUI:
     def __init__(self):
         self.qt = QWidget()
-
-        # Initialize application window's UI
         self.initUI()
 
 
     def initUI(self):
         # Make background dark
         self.darkPalette = QPalette()
-        # self.darkPalette.setColor(QPalette.Foreground, Qt.white)
+        # doesn't work self.darkPalette.setColor(QPalette.Foreground, Qt.white)
         self.darkPalette.setColor(QPalette.Background, Qt.black)
         self.qt.setPalette(self.darkPalette)
 
-        # Add weather box
+        # Add clock/date and weather widgets
+        self.qt.clock = timeManager.DateAndTime()
         self.qt.weather = weatherManager.Weather()
+
+        self.qt.clock.setFixedHeight(150)
         self.qt.weather.setFixedHeight(150)
+
         self.qt.hbox1 = QHBoxLayout() # Horizontal relative layout
         self.qt.hbox1.addWidget(self.qt.weather)
+        self.qt.hbox1.addStretch()
+        self.qt.hbox1.addWidget(self.qt.clock)
 
         self.qt.setLayout(self.qt.hbox1)
         self.qt.showFullScreen()

@@ -1,4 +1,9 @@
 from smartMirrorManager import *
+# Constants
+small_fontsize = 12
+med_fontsize = 18
+large_fontsize = 28
+xlarge_fontsize = 48
 
 class Weather(QWidget):
     def __init__(self):
@@ -6,12 +11,13 @@ class Weather(QWidget):
         self.initUI()
 
     def initUI(self):
-        font1 = QFont('Helvetica', large_fontsize)
+        font3 = QFont('Helvetica', large_fontsize)
+
         self.vbox = QVBoxLayout()
-        self.temperatureLbl = QLabel()
-        self.temperatureLbl.setFont(font1)
-        self.temperatureLbl.setText("<font color='white'>Temperature</font>")
+        self.tempLabel = QLabel()
+        self.tempLabel.setFont(font3)
+        self.tempLabel.setText("<font color='white'>Temperature</font>")
         self.hbox = QHBoxLayout()
-        self.hbox.addWidget(self.temperatureLbl)
-        self.hbox.setAlignment(Qt.AlignCenter)
+        self.hbox.addWidget(self.tempLabel)
+        self.hbox.setAlignment(Qt.AlignLeft)
         self.setLayout(self.hbox)
