@@ -15,32 +15,53 @@ time_format = 12
 date_format = "%b %d, %Y"
 
 
-class mainUI(QMainWindow):
+def main():
+    smartMirror_app = QApplication(sys.argv) # Create application (runnable from command line)
+    window = mainUI() # Create application window
+    sys.exit(smartMirror_app.exec_()) # Ensure clean app exit
 
+
+class mainUI:
     def __init__(self):
-        # Initialize parent window object
-        super(mainUI, self).__init__()
+        self.qt = QWidget()
 
         # Initialize application window's UI
         self.initUI()
 
 
     def initUI(self):
-        # Create full screen application window
-        self.showFullScreen()
-        self.setWindowTitle("magicMirror")
-
         # Make background dark
-        darkPalette = QPalette()
-        darkPalette.setColor(QPalette.Background, Qt.black)
-        darkPalette.setColor(QPalette.Foreground, Qt.white)
-        self.setPalette(darkPalette)
+        self.darkPalette = QPalette()
+        # self.darkPalette.setColor(QPalette.Foreground, Qt.white)
+        # self.darkPalette.setColor(QPalette.Background, Qt.black)
+        self.qt.setPalette(self.darkPalette)
 
-        self.hbox1 = QHBoxLayout()
-        self.clock = DateAndTime()
-        self.clock.setFixedHeight(150)
+        # Add weather
+        self.qt.weather = Weather()
+        self.qt.weather.setFixedHeight(150)
+        self.qt.hbox1 = QHBoxLayout() # Horizontal relative layout
+        self.qt.hbox1.addWidget(self.qt.weather)
 
-        self.hbox1.addWidget(self.clock)
+        self.qt.setLayout(self.qt.hbox1)
+        self.qt.showFullScreen()
+
+
+
+class Weather(QWidget):
+    def __init__(self):
+        super(Weather, self).__init__()
+        self.initUI()
+
+    def initUI(self):
+        font1 = QFont('Helvetica', large_fontsize)
+        self.vbox = QVBoxLayout()
+        self.temperatureLbl = QLabel('Tepr')
+        self.temperatureLbl.setFont(font1)
+
+        self.hbox = QHBoxLayout()
+        self.hbox.addWidget(self.temperatureLbl)
+        self.setLayout(self.hbox)
+
 
 
 class DateAndTime(QWidget):
@@ -48,16 +69,21 @@ class DateAndTime(QWidget):
         super(DateAndTime, self).__init__()
         self.initUI()
 
-
     def initUI(self):
         font1 = QFont('Helvetica', large_fontsize)
         font2 = QFont('Helvetica', small_fontsize)
 
-        # vbox = QVBoxLayout()
-        # timeLabel = QLabel()
-        # timeLabel.setAlignment(Qt.AlignRight)
-        # timeLabel.setFont(font1)
-        # vbox.addWidget(timeLabel)
+        self.vbox = QVBoxLayout()
+        self.time = ''
+        self.timeLabel = QLabel('')
+        self.vbox.setAlignment(Qt.AlignRight)
+        self.timeLabel.setFont(font1)
+        self.vbox.addWidget(self.timeLabel)
+        self.vbox.addStretch(2)
+        self.vbox.setSpacing(0)
+        self.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(self.vbox)
+        self.time_update()
 
 
         # Get current date
@@ -72,17 +98,6 @@ class DateAndTime(QWidget):
         #time = QTime.currentTime()
         #timeText = time.toString('hh:mm:ss a')
 
-
-
-def main():
-    # Create application
-    app = QApplication([])
-
-    # Create application window
-    window = mainUI()
-
-    # Ensure a clean exit
-    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
