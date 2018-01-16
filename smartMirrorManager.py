@@ -36,7 +36,7 @@ class mainUI:
         # self.darkPalette.setColor(QPalette.Background, Qt.black)
         self.qt.setPalette(self.darkPalette)
 
-        # Add weather
+        # Add weather box
         self.qt.weather = Weather()
         self.qt.weather.setFixedHeight(150)
         self.qt.hbox1 = QHBoxLayout() # Horizontal relative layout
