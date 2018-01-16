@@ -6,6 +6,12 @@ from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLay
 from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
 
+# Constants
+small_fontsize = 12
+med_fontsize = 18
+large_fontsize = 28
+xlarge_fontsize = 48
+
 class DateAndTime(QWidget):
     def __init__(self):
         super(DateAndTime, self).__init__()
@@ -17,26 +23,49 @@ class DateAndTime(QWidget):
 
         self.vbox = QVBoxLayout()
         self.time = ''
-        self.timeLabel = QLabel('')
+        self.timeLabel = QLabel()
         self.vbox.setAlignment(Qt.AlignRight)
         self.timeLabel.setFont(font1)
+        self.timeLabel.setText("<font color='white'>temp time</font>")
+
+        self.weekday = ''
+        self.weekdayLabel = QLabel()
+        self.weekdayLabel.setAlignment(Qt.AlignRight)
+
+        self.date = ''
+        self.dateLabel = QLabel()
+        self.dateLabel.setAlignment(Qt.AlignRight)
+
         self.vbox.addWidget(self.timeLabel)
+        self.vbox.addWidget(self.weekdayLabel)
+        self.vbox.addWidget(self.dateLabel)
+
         self.vbox.addStretch(2)
-        self.vbox.setSpacing(0)
-        self.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0,0,0,0)
         self.setLayout(self.vbox)
-        self.time_update()
+        self.updateTime()
 
+    def updateTime(self):
+        timer = QTimer(self) # Timer class updates things every once in a while
+        timer.timeout.connect(self.tick) # Connect timer to ticking method
+        timer.start(200) # Call every 200 ms
 
-        # Get current date
-        # date = QDate.currentDate()
-        # dateText = date.toString()
+    def tick(self):
+        newTime = time.strftime("%I:%M %p") # ex. hour: 2:45 PM
+        newDayOfWeek = time.strftime("%A")
+        newDate = time.strftime("%b %d, %Y")
 
-        # Get weekday name
-        # weekdayNum = QDate.dayOfWeek()
-        # weekDay = QDate.longDayName(weekdayNum)
+        if newTime != self.time:
+            temp = "<font color='white'>" + newTime + "</font>"
+            self.time = newTime
+            self.timeLabel.setText(temp)
 
-        # Get current time
-        #time = QTime.currentTime()
-        #timeText = time.toString('hh:mm:ss a')
+        if newDayOfWeek != self.weekday:
+            temp = "<font color='white'>" + newDayOfWeek + "</font>"
+            self.weekday = newDayOfWeek
+            self.weekdayLabel.setText(temp)
 
+        if newDate != self.date:
+            temp = "<font color='white'>" + newDate + "</font>"
+            self.date = newDate
+            self.dateLabel.setText(temp)
