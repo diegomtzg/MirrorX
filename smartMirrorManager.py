@@ -38,8 +38,6 @@ def main():
     # Ensure a clean exit
     sys.exit(app.exec_())
 
-
-
 if __name__ == '__main__':
     main()
 
