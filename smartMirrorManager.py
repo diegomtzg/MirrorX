@@ -2,8 +2,6 @@ import weatherManager
 import timeManager
 
 import sys
-import locale
-import time
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
