@@ -50,13 +50,17 @@ class Weather(QWidget):
 
         self.tempLabel = QLabel()
         self.tempLabel.setFont(font3)
+        self.tempLabel.setText("<font color='white'>temporary temp</font>")
         self.iconLabel = QLabel()
         self.currentlyLabel = QLabel()
         self.currentlyLabel.setFont(font2)
+        self.currentlyLabel.setText("<font color='white'>temporary curr</font>")
         self.forecastLabel = QLabel()
         self.forecastLabel.setFont(font1)
+        self.forecastLabel.setText("<font color='white'>temporary forecast</font>")
         self.locLabel = QLabel()
         self.locLabel.setFont(font1)
+        self.locLabel.setText("<font color='white'>temporary loc</font>")
 
         self.hbox = QHBoxLayout()
         self.vbox = QVBoxLayout()
@@ -93,13 +97,13 @@ class Weather(QWidget):
 
     def getWeather(self):
         try:
-            loc_req_url = "http://freegeoip.net/json/%s" % self.get_ip()
+            loc_req_url = "http://freegeoip.net/json/%s" % self.getIP()
             req = requests.get(loc_req_url)
             loc_json = json.loads(req.text)
             lat = loc_json['latitude']
             lon = loc_json['longitude']
 
-            newLoc = "%s, %s" % (loc_json['city'], loc_json['region_code'])
+
 
             weather_req_url = "https://api.darksky.net/forecast/%s/%s,%s" % (weather_api_token, lat,lon)
             req = requests.get(weather_req_url)
@@ -108,8 +112,8 @@ class Weather(QWidget):
             far = int(weather_json['currently']['temperature'])
             cel = int(5 * (far - 32) / 9)
 
-            newTemp = "%s%s" % (str(cel), degree_symbol)
-            newCurrently = currently2 = weather_json['currently']['summary']
+            newTemp = "%s%s" % (str(far), degree_symbol)
+            newCurrently = weather_json['currently']['summary']
             newForecast = weather_json['hourly']['summary'] #TODO maybe change to double quotes
             iconID = weather_json['currently']['icon']
             icon2 = None
@@ -125,7 +129,7 @@ class Weather(QWidget):
                     image = QImage(image, image.shape[1], image.shape[0],
                     image.strides[0], QImage.Format_RGB888)
 
-                    self.iconLbl.setPixmap(QPixmap.fromImage(image))
+                    self.iconLabel.setPixmap(QPixmap.fromImage(image))
             else:
                 self.iconLbl.setPixmap(QPixmap('')) # Remove image
 
@@ -143,7 +147,10 @@ class Weather(QWidget):
                 self.temperature = newTemp
                 temp = "<font color='white'>" + newTemp + "</font>"
                 self.tempLabel.setText(temp)
-                #TODO location error handling
+
+            newLoc = "%s, %s" % (loc_json['city'], loc_json['region_code'])
+            temp = "<font color='white'>" + newLoc + "</font>"
+            self.locLabel.setText(temp)
 
         except Exception as e:
             print("Error")
