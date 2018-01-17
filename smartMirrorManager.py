@@ -1,5 +1,6 @@
 import weatherManager
 import timeManager
+import quotesManager
 
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout
@@ -43,7 +44,17 @@ class mainUI:
         self.qt.hbox1.addStretch()
         self.qt.hbox1.addWidget(self.qt.clock)
 
-        self.qt.setLayout(self.qt.hbox1)
+        # Add quotes widget
+        self.qt.hbox2 = QHBoxLayout()
+        self.qt.quotes = quotesManager.Quotes(QWidget())
+        self.qt.hbox2.addWidget(self.qt.quotes)
+
+        self.qt.vbox = QVBoxLayout()
+        self.qt.vbox.addLayout(self.qt.hbox1)
+        self.qt.vbox.addStretch(1)
+        self.qt.vbox.addLayout(self.qt.hbox2)
+
+        self.qt.setLayout(self.qt.vbox)
 
 # idk how this all really works but hey at least we can quit the app by clicking 'q'
 class QKeyFilter(QObject):
