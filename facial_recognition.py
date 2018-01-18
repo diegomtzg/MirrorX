@@ -37,6 +37,7 @@ def createPerson(personName, imagePaths):
 def identifyPersonInImage(imgPath, return_names=False):
     faces = CF.face.detect(imgPath)
     faceIds = list(map(lambda face: face['faceId'], faces))
+    if faceIds == []:    return []
     # print(faceIds)
     identifiedFaces = CF.face.identify(faceIds, PERSON_GROUP_ID, max_candidates_return=1)
     # print(identifiedFaces)
@@ -53,11 +54,23 @@ def identifyPersonInImage(imgPath, return_names=False):
                                   , candidateIds))
         # print(candidateNames)
         return candidateNames
-
     return candidateIds
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
+    # import cv2
+    # cam = cv2.VideoCapture(0)
+    # imgPath = 'data/face.jpg'
+    # def addInstantPicture():
+    #     _, im = cam.read()
+    #     cv2.imwrite(imgPath, im)
+    #     CF.person.add_face(imgPath, PERSON_GROUP_ID, '39fc6c39-d148-4348-ac30-fe9164280907')
+    # for i in range(10):
+    #     print(i)
+    #     addInstantPicture()
+    # cv2.destroyAllWindows()
+    CF.person_group.train(PERSON_GROUP_ID)
+
     # identifyPersonInImage('Data/detection1.jpg')
     # for i in range(3,4):
     #     identify_test_path = ('Data/identification%d.jpg' % i)
