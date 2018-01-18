@@ -59,19 +59,26 @@ def identifyPersonInImage(imgPath, return_names=False):
 def getPerson(id):
     return CF.person.get(PERSON_GROUP_ID, id)
 
-# if __name__ == '__main__':
-    # import cv2
-    # cam = cv2.VideoCapture(0)
-    # imgPath = 'data/face.jpg'
-    # def addInstantPicture():
-    #     _, im = cam.read()
-    #     cv2.imwrite(imgPath, im)
-    #     CF.person.add_face(imgPath, PERSON_GROUP_ID, '39fc6c39-d148-4348-ac30-fe9164280907')
-    # for i in range(10):
-    #     print(i)
-    #     addInstantPicture()
-    # cv2.destroyAllWindows()
+def trainPerson(id):
+    import cv2
+    cam = cv2.VideoCapture(0)
+    imgPath = 'data/tmpface.jpg'
+    
+    # adds the picture of the camera
+    def addInstantPicture():
+        _, im = cam.read()
+        cv2.imwrite(imgPath, im)
+        CF.person.add_face(imgPath, PERSON_GROUP_ID, id)
+
+    for i in range(10):
+        print("Adding pictures.... %d" % i)
+        addInstantPicture()
+        
+    cv2.destroyAllWindows()
     CF.person_group.train(PERSON_GROUP_ID)
+
+# if __name__ == '__main__':
+    
 
     # identifyPersonInImage('Data/detection1.jpg')
     # for i in range(3,4):
