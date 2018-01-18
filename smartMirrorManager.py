@@ -44,8 +44,7 @@ class mainUI():
 
         self.qt.vbox = QVBoxLayout()
         self.qt.vbox.addLayout(self.qt.hbox1)
-        if STRETCH:
-            self.qt.vbox.addStretch(1)
+        self.qt.vbox.addStretch(1)
         self.qt.vbox.addLayout(self.qt.hbox2)
 
         self.qt.setLayout(self.qt.vbox)
@@ -64,14 +63,13 @@ class mainUI():
             widget = layout.itemAt(i).widget()
             if widget != None:
                 print(widget.parent())
-                widget.setParent(None)
+                # widget.setParent(None)
+                widget.deleteLater()
 
 
 
     def updateWidgets(self):
         global PERSON_NAME, PERSON_ID, STARTED, STRETCH
-
-        print("In updateWidgets loop")
         if not STARTED and PERSON_NAME != "" and PERSON_ID != "":
 
             # Add clock/date and weather widgets
@@ -82,8 +80,8 @@ class mainUI():
             self.qt.weather.setFixedHeight(150)
 
             self.qt.hbox1.addWidget(self.qt.weather)
-            if STRETCH:
-                self.qt.hbox1.addStretch(1)
+            
+            # self.qt.hbox1.addStretch(4)
             self.qt.hbox1.addWidget(self.qt.clock)
 
             # Add quotes widget
@@ -142,7 +140,6 @@ def findFaceAndSetName():
     global PERSON_NAME, PERSON_ID, cam, imgPath
 
     while(True):
-        time.sleep(1)
         success, image = cam.read()
         if not success: continue
         cv2.imwrite(imgPath, image)
@@ -153,11 +150,12 @@ def findFaceAndSetName():
             name = getPerson(res[0])
             print("Identified %s" % name['name'])
             break
-
+        time.sleep(1)
 
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
 
+    time.sleep(5)
     faceGoneAndRestart()
 
 def faceGoneAndRestart():
@@ -167,7 +165,6 @@ def faceGoneAndRestart():
     global PERSON_NAME, PERSON_ID, cam, imgPath
 
     num_count = 0
-
     # stop in 10 seconds
     while(num_count < 5):
         success, image = cam.read()
@@ -187,7 +184,6 @@ def faceGoneAndRestart():
 
     PERSON_NAME = ""
     PERSON_ID = ""
-
     findFaceAndSetName()
 
 
@@ -196,10 +192,8 @@ def initializeLogin():
     findFaceAndSetName()
 
 
-
 def start_qt():
     global smartMirrorApp
-
     smartMirrorApp = QApplication(sys.argv)  # Create application (runnable from command line)
     window = mainUI()  # Create application window 
 
