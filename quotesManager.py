@@ -27,13 +27,15 @@ class Quotes(QWidget):
             url = 'http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en'
             res = requests.get(url)
             s = res.text
-            s.replace('\r\n', '')
-            s.replace("\'", "'")
+            # s.replace('\r\n', '')
+            # s.replace("\'", "'")
             data = json.loads(s)
             tempQuote = "<font color='white'>" + data["quoteText"] + "</font>"
             tempAuthor = temp = "<font color='white'>-" + data["quoteAuthor"] + "</font>"
             self.lbl1.setText(tempQuote)
             self.lbl2.setText(tempAuthor)
 
-        except IOError:
-            print('no internet')
+        except Exception as e:
+            self.lbl1.setText("<font color='white'>" + "Carpé Diem" + "</font>")
+            self.lbl2.setText("<font color='white'>-" + "David Kosbie" + "</font>")
+
