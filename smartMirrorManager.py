@@ -17,7 +17,6 @@ global smartMirrorApp
 PERSON_NAME = ""
 PERSON_ID = ""
 STARTED = False
-STRETCH = True
 
 class mainUI():
     def __init__(self):
@@ -25,8 +24,6 @@ class mainUI():
         self.initUI()
 
     def initUI(self):
-        global STRETCH
-
         self.qt.showFullScreen()
 
         #Install signal filter to receive 'q' clicks to be able to quit app
@@ -40,10 +37,13 @@ class mainUI():
 
         self.qt.hbox1 = QHBoxLayout() # Horizontal relative layout
         self.qt.hbox2 = QHBoxLayout()
+        self.qt.welcomeBox = QHBoxLayout()
 
         self.qt.vbox = QVBoxLayout()
         self.qt.vbox.addLayout(self.qt.hbox1)
         self.qt.vbox.addStretch(1)
+        self.qt.vbox.addLayout(self.qt.welcomeBox)
+        #self.qt.vbox.addStretch(0.25)
         self.qt.vbox.addLayout(self.qt.hbox2)
 
         self.qt.setLayout(self.qt.vbox)
@@ -60,14 +60,12 @@ class mainUI():
         for i in reversed(range(layout.count())): 
             widget = layout.itemAt(i).widget()
             if widget != None:
-                print(widget.parent())
-                # widget.setParent(None)
+                print(widget)
+                #print(widget.parent())
                 widget.deleteLater()
 
-
-
     def updateWidgets(self):
-        global PERSON_NAME, PERSON_ID, STARTED, STRETCH
+        global PERSON_NAME, PERSON_ID, STARTED
         if not STARTED and PERSON_NAME != "" and PERSON_ID != "":
 
             # Add clock/date and weather widgets
@@ -77,21 +75,28 @@ class mainUI():
             self.qt.clock.setFixedHeight(150)
             self.qt.weather.setFixedHeight(150)
 
+            # Add weather and clock widgets
             self.qt.hbox1.addWidget(self.qt.weather)
-            
-            # self.qt.hbox1.addStretch(4)
             self.qt.hbox1.addWidget(self.qt.clock)
+
+            # Add welcome message
+            font = QFont('Helvetica', med_fontsize)
+            self.message = QLabel()
+            self.message.setAlignment(Qt.AlignCenter)
+            self.message.setFont(font)
+            self.qt.welcomeBox.addWidget(self.message)
+            self.message.setText("<font color='white'>" + "Welcome, " + PERSON_NAME + "</font>")
 
             # Add quotes widget
             self.qt.quotes = quotesManager.Quotes(QWidget())
             self.qt.hbox2.addWidget(self.qt.quotes)
 
             STARTED = True
-            STRETCH = False
 
         if STARTED and PERSON_NAME == "" and PERSON_ID == "":
             mainUI.clearLayout(self.qt.hbox1)
             mainUI.clearLayout(self.qt.hbox2)
+            mainUI.clearLayout(self.qt.welcomeBox)
 
             STARTED = False
 
