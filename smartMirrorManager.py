@@ -150,7 +150,7 @@ def findFaceAndSetName():
             name = getPerson(res[0])
             print("Identified %s" % name['name'])
             break
-        time.sleep(1)
+        time.sleep(2)
 
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
@@ -166,21 +166,23 @@ def faceGoneAndRestart():
 
     num_count = 0
     # stop in 10 seconds
-    while(num_count < 5):
+    while(num_count < 2):
+        print("a")
         success, image = cam.read()
         if not success: continue
+        print("b")
         cv2.imwrite(imgPath, image)
-        print("Write success!")
+        print("c")
         res = identifyPersonInImage(imgPath)
-        print(res)
+        print("d")
         if (len(res) == 0 or PERSON_ID not in res): # must only have one face
             print("Identified no face! Count %d " % num_count)
             num_count += 1
         else:
             print("Identified %s with ID %s" % (PERSON_NAME, PERSON_ID))
             num_count = 0
-        time.sleep(1)
-
+        print('e')
+        time.sleep(2)
 
     PERSON_NAME = ""
     PERSON_ID = ""
