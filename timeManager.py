@@ -7,10 +7,10 @@ from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
 
 # Constants
-small_fontsize = 12
-med_fontsize = 18
-large_fontsize = 28
-xlarge_fontsize = 48
+small_fontsize = 20
+med_fontsize = 30
+large_fontsize = 40
+xlarge_fontsize = 50
 
 class DateAndTime(QWidget):
     def __init__(self):
@@ -19,6 +19,7 @@ class DateAndTime(QWidget):
 
     def initUI(self):
         font1 = QFont('Helvetica', large_fontsize)
+        font2 = QFont('Helvetica', med_fontsize)
 
         self.vbox = QVBoxLayout()
         self.time = ''
@@ -29,11 +30,13 @@ class DateAndTime(QWidget):
 
         self.weekday = ''
         self.weekdayLabel = QLabel()
+        self.weekdayLabel.setFont(font2)
         self.weekdayLabel.setAlignment(Qt.AlignRight)
 
         self.date = ''
         self.dateLabel = QLabel()
         self.dateLabel.setAlignment(Qt.AlignRight)
+        self.dateLabel.setFont(font2)
 
         self.vbox.addWidget(self.timeLabel)
         self.vbox.addWidget(self.weekdayLabel)

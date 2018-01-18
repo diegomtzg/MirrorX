@@ -8,10 +8,10 @@ from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
 
 # Constants
-small_fontsize = 12
-med_fontsize = 18
-large_fontsize = 28
-xlarge_fontsize = 48
+small_fontsize = 20
+med_fontsize = 30
+large_fontsize = 40
+xlarge_fontsize = 50
 global smartMirrorApp
 
 class mainUI:
@@ -28,7 +28,6 @@ class mainUI:
 
         # Make background dark
         self.darkPalette = QPalette()
-        # doesn't work self.darkPalette.setColor(QPalette.Foreground, Qt.white)
         self.darkPalette.setColor(QPalette.Background, Qt.black)
         self.qt.setPalette(self.darkPalette)
 
@@ -44,6 +43,11 @@ class mainUI:
         self.qt.hbox1.addStretch()
         self.qt.hbox1.addWidget(self.qt.clock)
 
+        # Add welcome text widget
+        # self.qt.hbox3 = QHBoxLayout()
+        # self.qt.hbox3.addWidget()
+
+
         # Add quotes widget
         self.qt.hbox2 = QHBoxLayout()
         self.qt.quotes = quotesManager.Quotes(QWidget())
@@ -55,6 +59,24 @@ class mainUI:
         self.qt.vbox.addLayout(self.qt.hbox2)
 
         self.qt.setLayout(self.qt.vbox)
+
+class WelcomeMessage(QWidget):
+    def __init__(self, parent, *args, **kwargs):
+        super(WelcomeMessage, self).__init__()
+        self.initUI()
+
+    def initUI(self):
+        font1 = QFont('Helvetica', small_fontsize)
+        self.vbox = QVBoxLayout()
+        self.lbl1 = QLabel()
+        self.lbl1.setAlignment(Qt.AlignCenter)
+        self.vbox.setAlignment(Qt.AlignCenter)
+        self.vbox.addWidget(self.lbl1)
+        self.lbl1.setFont(font1)
+        self.setLayout(self.vbox)
+        temp = "<font color='white'>Welcome, person</font>"
+        self.lbl1.setText(temp)
+
 
 # idk how this all really works but hey at least we can quit the app by clicking 'q'
 class QKeyFilter(QObject):

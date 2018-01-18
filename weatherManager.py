@@ -8,10 +8,10 @@ from PyQt5.QtGui import QImage, QPixmap
 
 
 # Constants
-small_fontsize = 12
-med_fontsize = 18
-large_fontsize = 28
-xlarge_fontsize = 48
+small_fontsize = 20
+med_fontsize = 30
+large_fontsize = 40
+xlarge_fontsize = 50
 weather_api_token = '9435a4c25a087440d56cc46775e1eb0d'
 
 font1 = QFont('Helvetica', small_fontsize)
@@ -83,7 +83,7 @@ class Weather(QWidget):
     def updateWeather(self):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.getWeather)
-        self.timer.start(3600000)
+        self.timer.start(150000) # Update weather every 2.5ish minutes
 
     def getIP(self):
         try:
@@ -102,7 +102,6 @@ class Weather(QWidget):
             loc_json = json.loads(req.text)
             lat = loc_json['latitude']
             lon = loc_json['longitude']
-
 
 
             weather_req_url = "https://api.darksky.net/forecast/%s/%s,%s" % (weather_api_token, lat,lon)
