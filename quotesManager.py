@@ -36,6 +36,6 @@ class Quotes(QWidget):
             self.lbl2.setText(tempAuthor)
 
         except Exception as e:
-            self.lbl1.setText("<font color='white'>" + "Carpé Diem" + "</font>")
+            self.lbl1.setText("<font color='white'>" + "Carpe Diem" + "</font>")
             self.lbl2.setText("<font color='white'>-" + "David Kosbie" + "</font>")
 
