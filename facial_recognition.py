@@ -73,7 +73,8 @@ def trainPerson(id):
     for i in range(10):
         print("Adding pictures.... %d" % i)
         addInstantPicture()
-        
+
+    cam.release()
     cv2.destroyAllWindows()
     CF.person_group.train(PERSON_GROUP_ID)
 

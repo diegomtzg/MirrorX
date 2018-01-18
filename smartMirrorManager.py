@@ -17,6 +17,7 @@ global smartMirrorApp
 PERSON_NAME = ""
 PERSON_ID = ""
 STARTED = False
+STRETCH = True
 
 class mainUI():
     def __init__(self):
@@ -24,6 +25,8 @@ class mainUI():
         self.initUI()
 
     def initUI(self):
+        global STRETCH
+
         self.qt.showFullScreen()
 
         #Install signal filter to receive 'q' clicks to be able to quit app
@@ -41,7 +44,8 @@ class mainUI():
 
         self.qt.vbox = QVBoxLayout()
         self.qt.vbox.addLayout(self.qt.hbox1)
-        self.qt.vbox.addStretch(1)
+        if STRETCH:
+            self.qt.vbox.addStretch(1)
         self.qt.vbox.addLayout(self.qt.hbox2)
 
         self.qt.setLayout(self.qt.vbox)
@@ -51,21 +55,24 @@ class mainUI():
     def update_check(self):
         self.timer = QTimer()
         self.timer.timeout.connect(self.updateWidgets)
-        self.timer.start(500)
+        self.timer.start(1000)
 
     @staticmethod
     def clearLayout(layout):
         print(layout.count())
         for i in reversed(range(layout.count())): 
-            if (layout.itemAt(i).widget()) != None:
-                layout.itemAt(i).widget().setParent(None)
+            widget = layout.itemAt(i).widget()
+            if widget != None:
+                print(widget.parent())
+                widget.setParent(None)
+
 
 
     def updateWidgets(self):
-        global PERSON_NAME, PERSON_ID, STARTED
+        global PERSON_NAME, PERSON_ID, STARTED, STRETCH
 
         print("In updateWidgets loop")
-        if PERSON_NAME != "" and PERSON_ID != "" and not STARTED:
+        if not STARTED and PERSON_NAME != "" and PERSON_ID != "":
 
             # Add clock/date and weather widgets
             self.qt.clock = timeManager.DateAndTime()
@@ -75,7 +82,8 @@ class mainUI():
             self.qt.weather.setFixedHeight(150)
 
             self.qt.hbox1.addWidget(self.qt.weather)
-            self.qt.hbox1.addStretch()
+            if STRETCH:
+                self.qt.hbox1.addStretch(1)
             self.qt.hbox1.addWidget(self.qt.clock)
 
             # Add quotes widget
@@ -83,6 +91,7 @@ class mainUI():
             self.qt.hbox2.addWidget(self.qt.quotes)
 
             STARTED = True
+            STRETCH = False
 
         if STARTED and PERSON_NAME == "" and PERSON_ID == "":
             mainUI.clearLayout(self.qt.hbox1)
@@ -100,6 +109,8 @@ class QKeyFilter(QObject):
     def eventFilter(self, obj, event):
         if event.type() == QEvent.KeyPress:
             if event.key() == Qt.Key_Q:
+                cam.release()
+                cv2.destroyAllWindows()
                 sys.exit(smartMirrorApp.exec_())
         return False
 
@@ -126,15 +137,12 @@ def waitToScanFace(MAGIC_PHRASE):
 
 def findFaceAndSetName():
     from facial_recognition import identifyPersonInImage, getPerson
-    import cv2
+    import time
 
-    global PERSON_NAME, PERSON_ID
+    global PERSON_NAME, PERSON_ID, cam, imgPath
 
-    cam = cv2.VideoCapture(0)
-    imgPath = 'data/mostRecentFace.jpg'
-
-    # stop in 10 seconds
     while(True):
+        time.sleep(1)
         success, image = cam.read()
         if not success: continue
         cv2.imwrite(imgPath, image)
@@ -146,8 +154,6 @@ def findFaceAndSetName():
             print("Identified %s" % name['name'])
             break
 
-    cam.release()
-    cv2.destroyAllWindows()
 
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
@@ -156,16 +162,14 @@ def findFaceAndSetName():
 
 def faceGoneAndRestart():
     from facial_recognition import identifyPersonInImage, getPerson
-    import cv2, time
+    import time
 
-    global PERSON_NAME, PERSON_ID
+    global PERSON_NAME, PERSON_ID, cam, imgPath
 
-    cam = cv2.VideoCapture(0)
-    imgPath = 'data/mostRecentFace.jpg'
     num_count = 0
 
     # stop in 10 seconds
-    while(num_count < 10):
+    while(num_count < 5):
         success, image = cam.read()
         if not success: continue
         cv2.imwrite(imgPath, image)
@@ -178,11 +182,8 @@ def faceGoneAndRestart():
         else:
             print("Identified %s with ID %s" % (PERSON_NAME, PERSON_ID))
             num_count = 0
+        time.sleep(1)
 
-        time.sleep(0.5)
-
-    cam.release()
-    cv2.destroyAllWindows()
 
     PERSON_NAME = ""
     PERSON_ID = ""
@@ -204,6 +205,11 @@ def start_qt():
 
 if __name__ == '__main__':
     import threading as T
+    import cv2
+
+    cam = cv2.VideoCapture(0)
+    imgPath = 'data/mostRecentFace.jpg'
+
     smartMirrorApp = QApplication(sys.argv)  # Create application (runnable from command line)
     window = mainUI()  # Create application window  
     T.Thread(target=initializeLogin).start()
