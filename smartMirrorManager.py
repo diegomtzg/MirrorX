@@ -171,6 +171,7 @@ def faceGoneAndRestart():
     # stop in 10 seconds
     while(num_count < 2):
         print("A")
+        cam.retrieve()
         success, image = cam.read()
         if not success: continue
         print("B")
