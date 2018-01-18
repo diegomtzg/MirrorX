@@ -154,7 +154,7 @@ def findFaceAndSetName():
             print("Identified %s" % name['name'])
             break
         print("e")
-        time.sleep(2)
+        time.sleep(0.5)
 
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
@@ -170,7 +170,7 @@ def faceGoneAndRestart():
 
     num_count = 0
     # stop in 10 seconds
-    while(num_count < 2):
+    while(num_count < 10):
         print("A")
         cam.retrieve()
         success, image = cam.read()
@@ -187,7 +187,7 @@ def faceGoneAndRestart():
             print("Identified %s with ID %s" % (PERSON_NAME, PERSON_ID))
             num_count = 0
         print('E')
-        time.sleep(2)
+        time.sleep(0.5)
 
     PERSON_NAME = ""
     PERSON_ID = ""
