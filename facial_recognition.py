@@ -56,6 +56,8 @@ def identifyPersonInImage(imgPath, return_names=False):
         return candidateNames
     return candidateIds
 
+def getPerson(id):
+    return CF.person.get(PERSON_GROUP_ID, id)
 
 # if __name__ == '__main__':
     # import cv2

@@ -14,21 +14,14 @@ large_fontsize = 28
 xlarge_fontsize = 48
 global smartMirrorApp
 
-class mainUI:
-    def __init__(self, personId):
+PERSON_NAME = ""
+PERSON_ID = ""
+STARTED = False
+
+class mainUI():
+    def __init__(self):
         self.qt = QWidget()
         self.initUI()
-        self.personId = personId
-
-        # connecting with signal
-        self.connect(self, SIGNAL("noFace"), self.exit)
-        thread = worker(personId)
-        thread.start()
-
-    def exit(self, sigmsg):
-        print(sigmsg)
-        sys.exit(smartMirrorApp.exec_())  # Ensure clean app exit
-
 
     def initUI(self):
         self.qt.showFullScreen()
@@ -43,22 +36,8 @@ class mainUI:
         self.darkPalette.setColor(QPalette.Background, Qt.black)
         self.qt.setPalette(self.darkPalette)
 
-        # Add clock/date and weather widgets
-        self.qt.clock = timeManager.DateAndTime()
-        self.qt.weather = weatherManager.Weather()
-
-        self.qt.clock.setFixedHeight(150)
-        self.qt.weather.setFixedHeight(150)
-
         self.qt.hbox1 = QHBoxLayout() # Horizontal relative layout
-        self.qt.hbox1.addWidget(self.qt.weather)
-        self.qt.hbox1.addStretch()
-        self.qt.hbox1.addWidget(self.qt.clock)
-
-        # Add quotes widget
         self.qt.hbox2 = QHBoxLayout()
-        self.qt.quotes = quotesManager.Quotes(QWidget())
-        self.qt.hbox2.addWidget(self.qt.quotes)
 
         self.qt.vbox = QVBoxLayout()
         self.qt.vbox.addLayout(self.qt.hbox1)
@@ -67,6 +46,51 @@ class mainUI:
 
         self.qt.setLayout(self.qt.vbox)
 
+        self.update_check()
+
+    def update_check(self):
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.updateWidgets)
+        self.timer.start(500)
+
+    @staticmethod
+    def clearLayout(layout):
+        print(layout.count())
+        for i in reversed(range(layout.count())): 
+            if (layout.itemAt(i).widget()) != None:
+                layout.itemAt(i).widget().setParent(None)
+
+
+    def updateWidgets(self):
+        global PERSON_NAME, PERSON_ID, STARTED
+
+        print("In updateWidgets loop")
+        if PERSON_NAME != "" and PERSON_ID != "" and not STARTED:
+
+            # Add clock/date and weather widgets
+            self.qt.clock = timeManager.DateAndTime()
+            self.qt.weather = weatherManager.Weather()
+
+            self.qt.clock.setFixedHeight(150)
+            self.qt.weather.setFixedHeight(150)
+
+            self.qt.hbox1.addWidget(self.qt.weather)
+            self.qt.hbox1.addStretch()
+            self.qt.hbox1.addWidget(self.qt.clock)
+
+            # Add quotes widget
+            self.qt.quotes = quotesManager.Quotes(QWidget())
+            self.qt.hbox2.addWidget(self.qt.quotes)
+
+            STARTED = True
+
+        if STARTED and PERSON_NAME == "" and PERSON_ID == "":
+            mainUI.clearLayout(self.qt.hbox1)
+            mainUI.clearLayout(self.qt.hbox2)
+
+            STARTED = False
+
+        
 
 
 # idk how this all really works but hey at least we can quit the app by clicking 'q'
@@ -100,65 +124,90 @@ def waitToScanFace(MAGIC_PHRASE):
         print("Success! Magic phrase recognized")
 
 
-class worker(QThread):
-    def __init__(self, personId):
-        QThread.__init__(self, parent=smartMirrorApp)
-        self.signal = SIGNAL("noFace")
-        self.personId = personId
+def findFaceAndSetName():
+    from facial_recognition import identifyPersonInImage, getPerson
+    import cv2
 
-    def run(self):
-        import time
-        missCount = 0
-        cam = cv2.VideoCapture(1)
-        imgPath = '/data/workerFace.jpg'
-        while(missCount < 3):
-            time.sleep(5)
-            success, image = cam.read()
-            if not success: continue
-            cv2.imwrite(imgPath)
-            res = identifyPersonInImage(imgPath)
-            if self.personId in res:
-                missCount = 0
-            else:
-                missCount += 1
-        cv2.destroyAllWindows()
-        self.emit(self.signal, "unable to detect face for 3 iterations")
+    global PERSON_NAME, PERSON_ID
+
+    cam = cv2.VideoCapture(0)
+    imgPath = 'data/mostRecentFace.jpg'
+
+    # stop in 10 seconds
+    while(True):
+        success, image = cam.read()
+        if not success: continue
+        cv2.imwrite(imgPath, image)
+        print("Write success!")
+        res = identifyPersonInImage(imgPath)
+        print(res)
+        if (len(res) == 1): # must only have one face
+            name = getPerson(res[0])
+            print("Identified %s" % name['name'])
+            break
+
+    cam.release()
+    cv2.destroyAllWindows()
+
+    PERSON_NAME = name['name']
+    PERSON_ID = res[0]
+
+    faceGoneAndRestart()
+
+def faceGoneAndRestart():
+    from facial_recognition import identifyPersonInImage, getPerson
+    import cv2, time
+
+    global PERSON_NAME, PERSON_ID
+
+    cam = cv2.VideoCapture(0)
+    imgPath = 'data/mostRecentFace.jpg'
+    num_count = 0
+
+    # stop in 10 seconds
+    while(num_count < 10):
+        success, image = cam.read()
+        if not success: continue
+        cv2.imwrite(imgPath, image)
+        print("Write success!")
+        res = identifyPersonInImage(imgPath)
+        print(res)
+        if (len(res) == 0 or PERSON_ID not in res): # must only have one face
+            print("Identified no face! Count %d " % num_count)
+            num_count += 1
+        else:
+            print("Identified %s with ID %s" % (PERSON_NAME, PERSON_ID))
+            num_count = 0
+
+        time.sleep(0.5)
+
+    cam.release()
+    cv2.destroyAllWindows()
+
+    PERSON_NAME = ""
+    PERSON_ID = ""
+
+    findFaceAndSetName()
 
 
+def initializeLogin():
+    # waitToScanFace("mirror")
+    findFaceAndSetName()
+
+
+
+def start_qt():
+    global smartMirrorApp
+
+    smartMirrorApp = QApplication(sys.argv)  # Create application (runnable from command line)
+    window = mainUI()  # Create application window 
 
 if __name__ == '__main__':
-    while(True):
-        smartMirrorApp = QApplication(sys.argv)  # Create application (runnable from command line)
-        # waitToScanFace("mirror")
-        from facial_recognition import identifyPersonInImage
-        import cognitive_face as CF
-        import cv2
-        # take a picture from raspberry pi
-        cam = cv2.VideoCapture(0)
-        imgPath = 'data/mostRecentFace.jpg'
-        PERSON_GROUP_ID = 'mirror-pg'
+    import threading as T
+    smartMirrorApp = QApplication(sys.argv)  # Create application (runnable from command line)
+    window = mainUI()  # Create application window  
+    T.Thread(target=initializeLogin).start()
 
-        # stop in 10 seconds
-        while(True):
-            success, image = cam.read()
-            if not success: continue
-            cv2.imwrite(imgPath, image)
-            print("Write success!")
-            res = identifyPersonInImage(imgPath)
-            print(res)
-            if (len(res) == 1):
-                name = CF.person.get(PERSON_GROUP_ID, res[0])
-                print(name)
-                break    # must only have one face
-            # login to the faceId/start app
-        cv2.destroyAllWindows()
-        
-
-        # create thread that takes a picture every 5 seconds, if the specific 
-        # face disappears for 15 seconds, shut down application
-        window = mainUI(res[0])  # Create application window
-        
     sys.exit(smartMirrorApp.exec_())  # Ensure clean app exit
-
 
 
