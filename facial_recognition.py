@@ -35,12 +35,16 @@ def createPerson(personName, imagePaths):
 # identify the faces in the image at imgPath and return the personIds
 # if return_names is true, return names of the people instead.
 def identifyPersonInImage(imgPath, return_names=False):
+    print("1")
     faces = CF.face.detect(imgPath)
+    print("2")
     faceIds = list(map(lambda face: face['faceId'], faces))
     if faceIds == []:    return []
     # print(faceIds)
+    print("3")
     identifiedFaces = CF.face.identify(faceIds, PERSON_GROUP_ID, max_candidates_return=1)
     # print(identifiedFaces)
+    print("4")
     candidateIds = list(map(lambda candidate:  
                             candidate['candidates'][0]['personId']
                             if len(candidate['candidates']) > 0 else 
@@ -48,6 +52,7 @@ def identifyPersonInImage(imgPath, return_names=False):
                         , identifiedFaces))
     candidateIds = list(filter(lambda id: id != None, candidateIds))
     # print(candidateIds)
+    print("5")
     if return_names:
         candidateNames = list(map(lambda id: 
                                   CF.person.get(PERSON_GROUP_ID, id)['name']
