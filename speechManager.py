@@ -21,7 +21,7 @@ def recognizeSpeech(formatFilter=None): # recognize speech using CMU Sphinx
 	        	audio = r.listen(source)
 	        	recognized = r.recognize_google(audio).lower()
 	        	print(recognized)
-	        	if 'mirror' in recognized:
+	        	if 'hi mirror' in recognized:
 	        		break
 	        except sr.UnknownValueError:
 	        	print("Try again, google failed")
@@ -34,9 +34,9 @@ def recognizeSpeech(formatFilter=None): # recognize speech using CMU Sphinx
         print(output)
         if formatFilter==None:
             return output
-        elif formatFilter=="location":
+        elif formatFilter=="main":
             output = filter(output)
-            output = locationFilter(output)
+            output = mainFilter(output)
         else:
             output = filter(output)
         print(output)
@@ -75,25 +75,12 @@ def textNumbersToIntegers(text): # turn text numbers into integers
 
 def correctCommands(text):
     output = ""
-    corrections = {"prima": "Prima"}
+    corrections = {"prima": "Prima", "high":"hi"}
     for word in text.split():
         if word in corrections.keys():
             word = corrections[word]
         output += word + ' '
     return output
-
-def locationFilter(text):
-    prima = set(["prima", "Prima", "coffee", "tea", "rhema", "primo", "dreamer"])
-    sorrells = set(["sorrells", "sorel's", "shirelles", "cirella's", "library"])
-
-    for word in text.split():
-        if word in prima:
-            return "5Prima"
-        elif word in sorrells:
-            return "4Sorrells"
-        elif isNumber(word):
-            return word
-    return ""
 
 def isNumber(string):
     try:
@@ -102,39 +89,34 @@ def isNumber(string):
     except ValueError:
         return False
 
-def modeFilter(text):
-    restroom = set(["restroom", "bathroom", "pee", "mens", "ladies", "poo",
-                    "poop", "dump", "piss", "shit"])
-    printer = set(["print", "printer", "paper"])
-    popular = set(["popular", "common", "famous"])
-    saved = set(["saved", "save", "favorite", "past"])
-    specificDest = set(["specific", "particular"])
-    helpOptions = set(["help", "options", "assistance", "mode", "modes"])
+def mainFilter(text):
+    picture = set(["picture", "photo", "selfie", "camera"])
+    tweet = set(["tweet", "twitter", "post", "trump"])
+    greeting = set(["hi", "hello", "hey", "sup"])
 
     for word in text.split():
-        if word in restroom:
-            return "nearestRestroom"
-        elif word in printer:
-            return "nearestPrinter"
-        elif word in popular:
-            return "popularDestinations"
-        elif word in saved:
-            return "savedDestinations"
-        elif word in specificDest:
-            return "specificDestination"
-        elif word in helpOptions:
-            return "help"
+        if word in picture:
+            return "picture"
+        elif word in tweet:
+            return "tweet"
     return None
 
-# def confirmFilter(text):
-#     affirm = set(["yep", "yeah", "correct", "confirm", "confirmed"])
-#     negate = set(["nope", "nah", "incorrect", "wrong"])
-#     for word in text.split():
-#         if word in affirm:
-#             return "yes"
-#         elif word in negate:
-#             return "no"
-#     return None
+def confirmPost(text):
+    post = set(["yep", "yeah", "correct", "confirm", "confirmed", "tweet",
+                  "send", "post", "tweet", "twitter"])
+    save = set(["save", "keep", "store"])
+    retake = set(["retake", "take", "again", "more", "once"])
+    delete = set(["nope", "nah", "incorrect", "wrong", "delete", "erase"])
+    for word in text.split():
+        if word in post:
+            return "post"
+        elif word in save:
+            return "save"
+        elif word in retake:
+            return "retake"
+        elif word in delete:
+            return "delete"
+    return None
 
 
 
