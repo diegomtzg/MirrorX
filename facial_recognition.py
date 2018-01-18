@@ -35,11 +35,16 @@ def createPerson(personName, imagePaths):
 # identify the faces in the image at imgPath and return the personIds
 # if return_names is true, return names of the people instead.
 def identifyPersonInImage(imgPath, return_names=False):
+    print("1")
     faces = CF.face.detect(imgPath)
+    print("2")
     faceIds = list(map(lambda face: face['faceId'], faces))
+    if faceIds == []:    return []
     # print(faceIds)
+    print("3")
     identifiedFaces = CF.face.identify(faceIds, PERSON_GROUP_ID, max_candidates_return=1)
     # print(identifiedFaces)
+    print("4")
     candidateIds = list(map(lambda candidate:  
                             candidate['candidates'][0]['personId']
                             if len(candidate['candidates']) > 0 else 
@@ -47,17 +52,40 @@ def identifyPersonInImage(imgPath, return_names=False):
                         , identifiedFaces))
     candidateIds = list(filter(lambda id: id != None, candidateIds))
     # print(candidateIds)
+    print("5")
     if return_names:
         candidateNames = list(map(lambda id: 
                                   CF.person.get(PERSON_GROUP_ID, id)['name']
                                   , candidateIds))
         # print(candidateNames)
         return candidateNames
-
     return candidateIds
 
+def getPerson(id):
+    return CF.person.get(PERSON_GROUP_ID, id)
 
-if __name__ == '__main__':
+def trainPerson(id):
+    import cv2
+    cam = cv2.VideoCapture(0)
+    imgPath = 'data/tmpface.jpg'
+    
+    # adds the picture of the camera
+    def addInstantPicture():
+        _, im = cam.read()
+        cv2.imwrite(imgPath, im)
+        CF.person.add_face(imgPath, PERSON_GROUP_ID, id)
+
+    for i in range(10):
+        print("Adding pictures.... %d" % i)
+        addInstantPicture()
+
+    cam.release()
+    cv2.destroyAllWindows()
+    CF.person_group.train(PERSON_GROUP_ID)
+
+# if __name__ == '__main__':
+    
+
     # identifyPersonInImage('Data/detection1.jpg')
     # for i in range(3,4):
     #     identify_test_path = ('Data/identification%d.jpg' % i)
