@@ -1,0 +1,5 @@
+opencv-python
+pyqt5
+speech_recognition
+pyaudio2
+cognitive_face

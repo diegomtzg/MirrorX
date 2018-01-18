@@ -106,7 +106,7 @@ class Weather(QWidget):
 
 
             weather_req_url = "https://api.darksky.net/forecast/%s/%s,%s" % (weather_api_token, lat,lon)
-            req = requests.get(weather_req_url)
+            req = requests.get(weather_req_url, timeout=1)
             weather_json = json.loads(req.text)
             degree_symbol = u'\N{DEGREE SIGN}'
             far = int(weather_json['currently']['temperature'])
