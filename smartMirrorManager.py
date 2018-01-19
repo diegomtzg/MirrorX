@@ -159,6 +159,9 @@ def findFaceAndSetName():
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
 
+    personWav = "welcome" + PERSON_NAME.upper() + ".wav"
+    play(personWav)
+
     time.sleep(5)
     faceGoneAndRestart()
 
