@@ -203,7 +203,7 @@ if __name__ == '__main__':
     import threading as T
     import cv2
 
-    cam = cv2.VideoCapture(0)
+    cam = cv2.VideoCapture(1)
     imgPath = 'data/mostRecentFace.jpg'
 
     smartMirrorApp = QApplication(sys.argv)  # Create application (runnable from command line)
