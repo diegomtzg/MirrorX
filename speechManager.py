@@ -34,9 +34,15 @@ def recognizeSpeech(formatFilter=None): # recognize speech using CMU Sphinx
         print(output)
         if formatFilter==None:
             return output
+        elif formatFilter=="startup":
+            output = filter(output)
+            output = startupFilter(output)
         elif formatFilter=="main":
             output = filter(output)
             output = mainFilter(output)
+        elif formatFilter=="confirmPicture":
+            output = filter(output)
+            output = confirmPicture(output)
         else:
             output = filter(output)
         print(output)
@@ -89,19 +95,32 @@ def isNumber(string):
     except ValueError:
         return False
 
+def startupFilter(text):
+    startup = set(["morning", "wake", "rise", "on"])
+
+    for word in text.split():
+        if word in startup:
+            return "startup"
+    return None
+
 def mainFilter(text):
     picture = set(["picture", "photo", "selfie", "camera"])
     tweet = set(["tweet", "twitter", "post", "trump"])
     greeting = set(["hi", "hello", "hey", "sup"])
+    shutdown = set(["close", "off", "down"])
 
     for word in text.split():
         if word in picture:
             return "picture"
         elif word in tweet:
             return "tweet"
+        elif word in greeting:
+            return "greeting"
+        elif word in shutdown:
+            return "shutdown"
     return None
 
-def confirmPost(text):
+def confirmPicture(text):
     post = set(["yep", "yeah", "correct", "confirm", "confirmed", "tweet",
                   "send", "post", "tweet", "twitter"])
     save = set(["save", "keep", "store"])
