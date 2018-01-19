@@ -142,6 +142,7 @@ def findFaceAndSetName():
     global PERSON_NAME, PERSON_ID, cam, imgPath
 
     while(True):
+        time.sleep(0.5)
         print("a")
         success, image = cam.read()
         if not success: continue
@@ -155,15 +156,13 @@ def findFaceAndSetName():
             print("Identified %s" % name['name'])
             break
         print("e")
-        time.sleep(0.5)
 
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
 
-    time.sleep(1)
+    time.sleep(2)
     personWav = "voiceCommands/welcome_" + PERSON_NAME.lower() + ".wav"
     play(personWav)
-    time.sleep(2)
 
     faceGoneAndRestart()
 
@@ -176,6 +175,7 @@ def faceGoneAndRestart():
     num_count = 0
     # stop in 10 seconds
     while(num_count < 5):
+        time.sleep(0.5)
         print("A")
         cam.retrieve()
         success, image = cam.read()
@@ -192,7 +192,6 @@ def faceGoneAndRestart():
             print("Identified %s with ID %s" % (PERSON_NAME, PERSON_ID))
             num_count = 0
         print('E')
-        time.sleep(0.5)
 
     PERSON_NAME = ""
     PERSON_ID = ""
