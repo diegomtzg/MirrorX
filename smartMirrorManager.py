@@ -25,7 +25,7 @@ class mainUI():
         self.initUI()
 
     def initUI(self):
-        self.qt.show() #FullScreen()
+        self.qt.showFullScreen()
 
         #Install signal filter to receive 'q' clicks to be able to quit app
         filter = QKeyFilter(self.qt)
@@ -70,21 +70,15 @@ class mainUI():
         if not STARTED and PERSON_NAME != "" and PERSON_ID != "":
 
             # Add clock/date and weather widgets
-            print("ADDING WIDGETS !!!!!")
             self.qt.clock = timeManager.DateAndTime()
             self.qt.weather = weatherManager.Weather()
-            print("WIDGETS: A")
 
             self.qt.clock.setFixedHeight(150)
             self.qt.weather.setFixedHeight(150)
 
-            print("WIDGETS: B")
-
             # Add weather and clock widgets
             self.qt.hbox1.addWidget(self.qt.weather)
             self.qt.hbox1.addWidget(self.qt.clock)
-
-            print("WIDGETS: C")
 
             # Add welcome message
             font = QFont('Helvetica', xlarge_fontsize)
@@ -94,17 +88,13 @@ class mainUI():
             self.qt.welcomeBox.addWidget(self.message)
             self.message.setText("<font color='white'>" + "Welcome, " + PERSON_NAME + "</font>")
 
-            print("WIDGETS: D")
-
             # Add quotes widget
             self.qt.quotes = quotesManager.Quotes(QWidget())
             self.qt.hbox2.addWidget(self.qt.quotes)
-            print("FINISHED ADDING WIDGETS!!!!!!")
 
             personWav = "voiceCommands/welcome_" + PERSON_NAME.lower() + ".wav"
             play(personWav)
 
-            print("PLAYING SONGS")
             STARTED = True
 
         if STARTED and PERSON_NAME == "" and PERSON_ID == "":
@@ -154,25 +144,17 @@ def findFaceAndSetName():
 
     global PERSON_NAME, PERSON_ID, cam, imgPath
 
-    def print(t):
-        pass
-
     while(True):
         time.sleep(0.5)
-        print("a")
         success, image = cam.read()
         if not success: continue
-        print("b")
         cv2.imwrite(imgPath, image)
-        print("c")
         res = identifyPersonInImage(imgPath)
         print(res)
-        print('d')
         if (len(res) == 1): # must only have one face
             name = getPerson(res[0])
             print("Identified %s" % name['name'])
             break
-        print("e")
 
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
@@ -185,29 +167,21 @@ def faceGoneAndRestart():
 
     global PERSON_NAME, PERSON_ID, cam, imgPath
 
-    def print(t):
-        pass
-
     num_count = 0
     # stop in 10 seconds
     while(num_count < 3):
         time.sleep(0.5)
-        print("A")
         cam.retrieve()
         success, image = cam.read()
         if not success: continue
-        print("B")
         cv2.imwrite(imgPath, image)
-        print("C")
         res = identifyPersonInImage(imgPath)
-        print("D")
         if (len(res) == 0 or PERSON_ID not in res): # must only have one face
-            print("Identified no face! Count %d " % num_count)
+            print("Identified no face of %s! Count %d " % (PERSON_NAME, num_count))
             num_count += 1
         else:
             print("Identified %s with ID %s" % (PERSON_NAME, PERSON_ID))
             num_count = 0
-        print('E')
 
     PERSON_NAME = ""
     PERSON_ID = ""
