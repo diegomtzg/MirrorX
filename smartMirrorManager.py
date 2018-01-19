@@ -25,7 +25,7 @@ class mainUI():
         self.initUI()
 
     def initUI(self):
-        self.qt.showFullScreen()
+        self.qt.show() #FullScreen()
 
         #Install signal filter to receive 'q' clicks to be able to quit app
         filter = QKeyFilter(self.qt)
@@ -70,15 +70,21 @@ class mainUI():
         if not STARTED and PERSON_NAME != "" and PERSON_ID != "":
 
             # Add clock/date and weather widgets
+            print("ADDING WIDGETS !!!!!")
             self.qt.clock = timeManager.DateAndTime()
             self.qt.weather = weatherManager.Weather()
+            print("WIDGETS: A")
 
             self.qt.clock.setFixedHeight(150)
             self.qt.weather.setFixedHeight(150)
 
+            print("WIDGETS: B")
+
             # Add weather and clock widgets
             self.qt.hbox1.addWidget(self.qt.weather)
             self.qt.hbox1.addWidget(self.qt.clock)
+
+            print("WIDGETS: C")
 
             # Add welcome message
             font = QFont('Helvetica', xlarge_fontsize)
@@ -88,12 +94,17 @@ class mainUI():
             self.qt.welcomeBox.addWidget(self.message)
             self.message.setText("<font color='white'>" + "Welcome, " + PERSON_NAME + "</font>")
 
+            print("WIDGETS: D")
+
             # Add quotes widget
             self.qt.quotes = quotesManager.Quotes(QWidget())
             self.qt.hbox2.addWidget(self.qt.quotes)
+            print("FINISHED ADDING WIDGETS!!!!!!")
 
             personWav = "voiceCommands/welcome_" + PERSON_NAME.lower() + ".wav"
             play(personWav)
+
+            print("PLAYING SONGS")
             STARTED = True
 
         if STARTED and PERSON_NAME == "" and PERSON_ID == "":
@@ -143,6 +154,9 @@ def findFaceAndSetName():
 
     global PERSON_NAME, PERSON_ID, cam, imgPath
 
+    def print(t):
+        pass
+
     while(True):
         time.sleep(0.5)
         print("a")
@@ -170,6 +184,9 @@ def faceGoneAndRestart():
     import time
 
     global PERSON_NAME, PERSON_ID, cam, imgPath
+
+    def print(t):
+        pass
 
     num_count = 0
     # stop in 10 seconds
