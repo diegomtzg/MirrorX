@@ -9,17 +9,6 @@
 
 # Existing Voice Recordings
 
-# >> "What would you like to do? Say help for options."
-# >> "Would you like directions to a specific destination, to get to a popular
-# location, to get to your saved locations, to find the nearest restroom or
-# printer, or to find God?"
-# >> "Where would you like to go?"
-# >> "Where are you now?"
-# >> "You have arrived at your destination."
-# >> "Click the space bar to return to the home screen or click enter to save this
-# destination."
-
-
 # Siri sound effects recorded from the following youtube video:
 # https://www.youtube.com/watch?v=KfITibBsNwI
 
@@ -64,7 +53,7 @@ def record(outputFile):
     FORMAT = pyaudio.paInt16
     CHANNELS = 2
     RATE = 44100
-    RECORD_SECONDS = 5
+    RECORD_SECONDS = 2
 
     p = pyaudio.PyAudio()
 
@@ -98,7 +87,13 @@ def record(outputFile):
 #####################################################################
 #####################################################################
 
-# record("temp.wav")
+# Hi/Good morning Ike.
+# Hi/Good morning Diego.
+# Hi/Good morning Kevin.
+# Hi/Good morning Joel.
+# Hi/Good morning Adrian.
 
-# play("temp.wav")
+# record("welcomeIke.wav")
+
+# play("welcomeJoel.wav")
 
