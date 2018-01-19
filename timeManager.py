@@ -18,7 +18,7 @@ class DateAndTime(QWidget):
         self.initUI()
 
     def initUI(self):
-        font1 = QFont('Helvetica', med_fontsize)
+        font1 = QFont('Helvetica', large_fontsize)
         font2 = QFont('Helvetica', med_fontsize)
 
         self.vbox = QVBoxLayout()
