@@ -152,6 +152,7 @@ def findFaceAndSetName():
         cv2.imwrite(imgPath, image)
         print("c")
         res = identifyPersonInImage(imgPath)
+        print(res)
         print('d')
         if (len(res) == 1): # must only have one face
             name = getPerson(res[0])
