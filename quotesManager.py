@@ -5,10 +5,10 @@ from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLay
 from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
 
-small_fontsize = 20
-med_fontsize = 30
-large_fontsize = 40
-xlarge_fontsize = 50
+small_fontsize = 15
+med_fontsize = 25
+large_fontsize = 35
+xlarge_fontsize = 45
 
 class Quotes(QWidget):
     def __init__(self, parent, *args, **kwargs):
@@ -42,7 +42,7 @@ class Quotes(QWidget):
                 data = json.loads(s)
                 quote = data["quoteText"]
 
-                if(len(quote) < 100):
+                if(len(quote) < 80):
                     tempQuote = "<font color='white'>" + quote + "</font>"
                     author = data["quoteAuthor"]
                     if len(author) < 2:
