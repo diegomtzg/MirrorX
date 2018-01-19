@@ -3,14 +3,14 @@ import locale
 import time
 from smartMirrorManager import *
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout
-from PyQt5.QtGui import QFont, QPalette
+from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 # Constants
-small_fontsize = 15
-med_fontsize = 25
-large_fontsize = 35
-xlarge_fontsize = 45
+small_fontsize = 12
+med_fontsize = 22
+large_fontsize = 32
+xlarge_fontsize = 41
 
 class DateAndTime(QWidget):
     def __init__(self):
@@ -18,7 +18,7 @@ class DateAndTime(QWidget):
         self.initUI()
 
     def initUI(self):
-        font1 = QFont('Helvetica', xlarge_fontsize)
+        font1 = QFont('Helvetica', med_fontsize)
         font2 = QFont('Helvetica', med_fontsize)
 
         self.vbox = QVBoxLayout()
@@ -39,7 +39,6 @@ class DateAndTime(QWidget):
         self.dateLabel.setFont(font2)
 
         self.vbox.addWidget(self.timeLabel)
-        self.vbox.addStretch(2)
         self.vbox.addWidget(self.weekdayLabel)
         self.vbox.addWidget(self.dateLabel)
 
