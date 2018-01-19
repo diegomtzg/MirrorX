@@ -57,12 +57,9 @@ class mainUI():
 
     @staticmethod
     def clearLayout(layout):
-        print(layout.count())
         for i in reversed(range(layout.count())): 
             widget = layout.itemAt(i).widget()
             if widget != None:
-                print(widget)
-                #print(widget.parent())
                 widget.deleteLater()
 
     def updateWidgets(self):
