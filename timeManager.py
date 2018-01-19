@@ -39,7 +39,7 @@ class DateAndTime(QWidget):
         self.dateLabel.setFont(font2)
 
         self.vbox.addWidget(self.timeLabel)
-        self.vbox.addStretch(0.5)
+        self.vbox.addStretch(2)
         self.vbox.addWidget(self.weekdayLabel)
         self.vbox.addWidget(self.dateLabel)
 
