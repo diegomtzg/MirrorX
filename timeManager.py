@@ -7,10 +7,10 @@ from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
 
 # Constants
-small_fontsize = 20
-med_fontsize = 30
-large_fontsize = 40
-xlarge_fontsize = 50
+small_fontsize = 15
+med_fontsize = 25
+large_fontsize = 35
+xlarge_fontsize = 45
 
 class DateAndTime(QWidget):
     def __init__(self):

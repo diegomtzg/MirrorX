@@ -8,10 +8,10 @@ from PyQt5.QtGui import QImage, QPixmap
 
 
 # Constants
-small_fontsize = 20
-med_fontsize = 30
-large_fontsize = 40
-xlarge_fontsize = 50
+small_fontsize = 15
+med_fontsize = 25
+large_fontsize = 35
+xlarge_fontsize = 45
 weather_api_token = '9435a4c25a087440d56cc46775e1eb0d'
 
 font1 = QFont('Helvetica', small_fontsize)
