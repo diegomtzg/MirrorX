@@ -89,8 +89,8 @@ class mainUI():
             self.qt.quotes = quotesManager.Quotes(QWidget())
             self.qt.hbox2.addWidget(self.qt.quotes)
 
-            personWav = "voiceCommands/welcome_" + PERSON_NAME.lower() + ".wav"
-            play(personWav)
+            # personWav = "voiceCommands/welcome_" + PERSON_NAME.lower() + ".wav"
+            # play(personWav)
 
             STARTED = True
 
