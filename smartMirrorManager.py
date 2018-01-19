@@ -195,7 +195,7 @@ def faceGoneAndRestart():
     PERSON_NAME = ""
     PERSON_ID = ""
 
-    time.sleep(1)
+    time.sleep(2)
     findFaceAndSetName()
 
 
