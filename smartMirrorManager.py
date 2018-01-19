@@ -9,10 +9,10 @@ from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
 
 # Constants
-small_fontsize = 15
-med_fontsize = 25
-large_fontsize = 35
-xlarge_fontsize = 45
+small_fontsize = 12
+med_fontsize = 22
+large_fontsize = 32
+xlarge_fontsize = 42
 global smartMirrorApp
 
 PERSON_NAME = ""
@@ -81,7 +81,7 @@ class mainUI():
             self.qt.hbox1.addWidget(self.qt.clock)
 
             # Add welcome message
-            font = QFont('Helvetica', med_fontsize)
+            font = QFont('Helvetica', xlarge_fontsize)
             self.message = QLabel()
             self.message.setAlignment(Qt.AlignCenter)
             self.message.setFont(font)
@@ -160,7 +160,7 @@ def findFaceAndSetName():
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
 
-    time.sleep(2)
+    time.sleep(1)
     personWav = "voiceCommands/welcome_" + PERSON_NAME.lower() + ".wav"
     play(personWav)
 
@@ -174,7 +174,7 @@ def faceGoneAndRestart():
 
     num_count = 0
     # stop in 10 seconds
-    while(num_count < 5):
+    while(num_count < 3):
         time.sleep(0.5)
         print("A")
         cam.retrieve()
@@ -196,7 +196,7 @@ def faceGoneAndRestart():
     PERSON_NAME = ""
     PERSON_ID = ""
 
-    time.sleep(2)
+    time.sleep(1)
     findFaceAndSetName()
 
 
