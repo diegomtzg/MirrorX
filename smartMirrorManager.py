@@ -92,9 +92,9 @@ class mainUI():
             self.qt.quotes = quotesManager.Quotes(QWidget())
             self.qt.hbox2.addWidget(self.qt.quotes)
 
-            STARTED = True
             personWav = "voiceCommands/welcome_" + PERSON_NAME.lower() + ".wav"
             play(personWav)
+            STARTED = True
 
         if STARTED and PERSON_NAME == "" and PERSON_ID == "":
             mainUI.clearLayout(self.qt.hbox1)
