@@ -93,6 +93,8 @@ class mainUI():
             self.qt.hbox2.addWidget(self.qt.quotes)
 
             STARTED = True
+            personWav = "voiceCommands/welcome_" + PERSON_NAME.lower() + ".wav"
+            play(personWav)
 
         if STARTED and PERSON_NAME == "" and PERSON_ID == "":
             mainUI.clearLayout(self.qt.hbox1)
@@ -159,10 +161,6 @@ def findFaceAndSetName():
 
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
-
-    time.sleep(1)
-    personWav = "voiceCommands/welcome_" + PERSON_NAME.lower() + ".wav"
-    play(personWav)
 
     faceGoneAndRestart()
 
