@@ -9,10 +9,10 @@ from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
 
 # Constants
-small_fontsize = 20
-med_fontsize = 30
-large_fontsize = 40
-xlarge_fontsize = 50
+small_fontsize = 15
+med_fontsize = 25
+large_fontsize = 35
+xlarge_fontsize = 45
 global smartMirrorApp
 
 PERSON_NAME = ""
@@ -160,11 +160,11 @@ def findFaceAndSetName():
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
 
-    time.sleep(1.5)
+    time.sleep(1)
     personWav = "voiceCommands/welcome_" + PERSON_NAME.lower() + ".wav"
     play(personWav)
-    time.sleep(5)
-    
+    time.sleep(2)
+
     faceGoneAndRestart()
 
 def faceGoneAndRestart():
