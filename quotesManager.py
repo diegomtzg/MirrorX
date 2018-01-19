@@ -32,19 +32,27 @@ class Quotes(QWidget):
         self.quotes_get()
 
     def quotes_get(self):
-        try:
-            url = 'http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en'
-            res = requests.get(url)
-            s = res.text
-            # s.replace('\r\n', '')
-            # s.replace("\'", "'")
-            data = json.loads(s)
-            tempQuote = "<font color='white'>" + data["quoteText"] + "</font>"
-            tempAuthor = temp = "<font color='white'>-" + data["quoteAuthor"] + "</font>"
-            self.lbl1.setText(tempQuote)
-            self.lbl2.setText(tempAuthor)
+        notSet = True
 
-        except Exception as e:
-            self.lbl1.setText("<font color='white'>" + "Carpe Diem" + "</font>")
-            self.lbl2.setText("<font color='white'>-" + "David Kosbie" + "</font>")
+        while notSet:
+            try:
+                url = 'http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en'
+                res = requests.get(url)
+                s = res.text
+                data = json.loads(s)
+                quote = data["quoteText"]
+
+                if(len(quote) < 100):
+                    tempQuote = "<font color='white'>" + quote + "</font>"
+                    author = data["quoteAuthor"]
+                    if len(author) < 2:
+                        author = "Unknown"
+                    tempAuthor = "<font color='white'>-" + author + "</font>"
+                    self.lbl1.setText(tempQuote)
+                    self.lbl2.setText(tempAuthor)
+                    notSet = False
+
+            except Exception as e:
+                self.lbl1.setText("<font color='white'>" + "Carpe Diem" + "</font>")
+                self.lbl2.setText("<font color='white'>-" + "David Kosbie" + "</font>")
 
