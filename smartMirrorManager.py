@@ -1,6 +1,7 @@
 import weatherManager
 import timeManager
 import quotesManager
+from audio_engine import *
 
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout
@@ -159,10 +160,11 @@ def findFaceAndSetName():
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
 
-    personWav = "welcome" + PERSON_NAME.upper() + ".wav"
+    time.sleep(1.5)
+    personWav = "voiceCommands/welcome_" + PERSON_NAME.lower() + ".wav"
     play(personWav)
-
     time.sleep(5)
+    
     faceGoneAndRestart()
 
 def faceGoneAndRestart():
@@ -173,7 +175,7 @@ def faceGoneAndRestart():
 
     num_count = 0
     # stop in 10 seconds
-    while(num_count < 10):
+    while(num_count < 5):
         print("A")
         cam.retrieve()
         success, image = cam.read()
@@ -194,6 +196,8 @@ def faceGoneAndRestart():
 
     PERSON_NAME = ""
     PERSON_ID = ""
+
+    time.sleep(2)
     findFaceAndSetName()
 
 
