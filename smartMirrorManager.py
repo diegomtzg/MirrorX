@@ -146,6 +146,7 @@ def findFaceAndSetName():
         success, image = cam.read()
         if not success: continue
         cv2.imwrite(imgPath, image)
+        # print('PHOTO SAVED')
         res = identifyPersonInImage(imgPath)
         print(res)
         if (len(res) == 1): # must only have one face
@@ -168,10 +169,11 @@ def faceGoneAndRestart():
     # stop in 10 seconds
     while(num_count < 3):
         time.sleep(0.5)
-        cam.retrieve()
+        # cam.retrieve()
         success, image = cam.read()
         if not success: continue
         cv2.imwrite(imgPath, image)
+        # print('PHOTO SAVED')
         res = identifyPersonInImage(imgPath)
         if (len(res) == 0 or PERSON_ID not in res): # must only have one face
             print("Identified no face of %s! Count %d " % (PERSON_NAME, num_count))
