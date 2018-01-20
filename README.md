@@ -5,7 +5,8 @@
 ## Features
  * Weather  
  * Current time/date
- * Quotes
+ * Randomized Motivational Quote Generation
+ * Face Recognition through Microsoft Cognitive Services
 
 ### Required python packages
 1.  opencv2
