@@ -1,7 +1,6 @@
 import weatherManager
 import timeManager
 import quotesManager
-from audio_engine import *
 
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout
@@ -44,7 +43,6 @@ class mainUI():
         self.qt.vbox.addLayout(self.qt.hbox1)
         self.qt.vbox.addStretch(1)
         self.qt.vbox.addLayout(self.qt.welcomeBox)
-        #self.qt.vbox.addStretch(0.25)
         self.qt.vbox.addLayout(self.qt.hbox2)
 
         self.qt.setLayout(self.qt.vbox)
@@ -88,9 +86,6 @@ class mainUI():
             # Add quotes widget
             self.qt.quotes = quotesManager.Quotes(QWidget())
             self.qt.hbox2.addWidget(self.qt.quotes)
-
-            # personWav = "voiceCommands/welcome_" + PERSON_NAME.lower() + ".wav"
-            # play(personWav)
 
             STARTED = True
 
@@ -166,8 +161,7 @@ def faceGoneAndRestart():
     global PERSON_NAME, PERSON_ID, cam, imgPath
 
     num_count = 0
-    # stop in 10 seconds
-    while(num_count < 3):
+    while(num_count < 100):
         time.sleep(0.5)
         # cam.retrieve()
         success, image = cam.read()
