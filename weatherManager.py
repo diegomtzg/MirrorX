@@ -8,10 +8,10 @@ from PyQt5.QtGui import QImage, QPixmap
 
 
 # Constants
-small_fontsize = 12
-med_fontsize = 18
-large_fontsize = 28
-xlarge_fontsize = 48
+small_fontsize = 15
+med_fontsize = 25
+large_fontsize = 35
+xlarge_fontsize = 45
 weather_api_token = '9435a4c25a087440d56cc46775e1eb0d'
 
 font1 = QFont('Helvetica', small_fontsize)
@@ -83,7 +83,7 @@ class Weather(QWidget):
     def updateWeather(self):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.getWeather)
-        self.timer.start(3600000)
+        self.timer.start(150000) # Update weather every 2.5ish minutes
 
     def getIP(self):
         try:
@@ -104,17 +104,16 @@ class Weather(QWidget):
             lon = loc_json['longitude']
 
 
-
             weather_req_url = "https://api.darksky.net/forecast/%s/%s,%s" % (weather_api_token, lat,lon)
-            req = requests.get(weather_req_url)
+            req = requests.get(weather_req_url, timeout=1)
             weather_json = json.loads(req.text)
             degree_symbol = u'\N{DEGREE SIGN}'
             far = int(weather_json['currently']['temperature'])
             cel = int(5 * (far - 32) / 9)
 
-            newTemp = "%s%s" % (str(far), degree_symbol)
+            newTemp = "%s%s" % (str(cel), degree_symbol)
             newCurrently = weather_json['currently']['summary']
-            newForecast = weather_json['hourly']['summary'] #TODO maybe change to double quotes
+            newForecast = weather_json['hourly']['summary']
             iconID = weather_json['currently']['icon']
             icon2 = None
             if iconID in icon_lookup:
@@ -154,16 +153,3 @@ class Weather(QWidget):
 
         except Exception as e:
             print("Error")
-
-
-
-
-
-
-
-
-
-
-
-
-

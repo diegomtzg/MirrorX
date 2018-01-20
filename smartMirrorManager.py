@@ -9,9 +9,9 @@ from PyQt5.QtCore import *
 
 # Constants
 small_fontsize = 12
-med_fontsize = 18
-large_fontsize = 28
-xlarge_fontsize = 48
+med_fontsize = 22
+large_fontsize = 32
+xlarge_fontsize = 42
 global smartMirrorApp
 
 class mainUI:
