@@ -111,9 +111,9 @@ class Weather(QWidget):
             far = int(weather_json['currently']['temperature'])
             cel = int(5 * (far - 32) / 9)
 
-            newTemp = "%s%s" % (str(far), degree_symbol)
+            newTemp = "%s%s" % (str(cel), degree_symbol)
             newCurrently = weather_json['currently']['summary']
-            newForecast = weather_json['hourly']['summary'] #TODO maybe change to double quotes
+            newForecast = weather_json['hourly']['summary']
             iconID = weather_json['currently']['icon']
             icon2 = None
             if iconID in icon_lookup:
