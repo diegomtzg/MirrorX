@@ -6,12 +6,12 @@ import json
 import cv2
 from PyQt5.QtGui import QImage, QPixmap
 from smartMirrorManager import *
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout, QSizePolicy
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 # Constants
-small_fontsize = 15
+small_fontsize = 20
 med_fontsize = 25
 large_fontsize = 35
 xlarge_fontsize = 45
@@ -60,6 +60,7 @@ class Weather(QWidget):
         self.currentlyLabel.setText("<font color='white'>temporary curr</font>")
         self.forecastLabel = QLabel()
         self.forecastLabel.setFont(font1)
+        self.forecastLabel.setWordWrap(True)
         self.forecastLabel.setText("<font color='white'>temporary forecast</font>")
         self.locLabel = QLabel()
         self.locLabel.setFont(font1)
@@ -114,7 +115,7 @@ class Weather(QWidget):
             far = int(weather_json['currently']['temperature'])
             cel = int(5 * (far - 32) / 9)
 
-            newTemp = "%s%s" % (str(cel), degree_symbol)
+            newTemp = "%s%s" % (str(far), degree_symbol)
             newCurrently = weather_json['currently']['summary']
             newForecast = weather_json['hourly']['summary']
             iconID = weather_json['currently']['icon']
@@ -142,6 +143,7 @@ class Weather(QWidget):
 
             if self.forecast != newForecast:
                 self.forecast = newForecast
+                newForecast = newForecast.replace("<", "less than")
                 temp = "<font color='white'>" + newForecast + "</font>"
                 self.forecastLabel.setText(temp)
 
