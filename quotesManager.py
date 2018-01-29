@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
 import numpy as np
 
-small_fontsize = 17
+small_fontsize = 20
 med_fontsize = 25
 large_fontsize = 35
 xlarge_fontsize = 45

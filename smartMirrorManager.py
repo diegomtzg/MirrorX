@@ -15,7 +15,7 @@ from PyQt5.QtCore import *
 small_fontsize = 12
 med_fontsize = 22
 large_fontsize = 32
-xlarge_fontsize = 42
+xlarge_fontsize = 45
 global smartMirrorApp
 
 PERSON_NAME = ""
