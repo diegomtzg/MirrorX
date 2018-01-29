@@ -5,7 +5,10 @@ import requests
 import json
 import cv2
 from PyQt5.QtGui import QImage, QPixmap
-
+from smartMirrorManager import *
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 
 # Constants
 small_fontsize = 15

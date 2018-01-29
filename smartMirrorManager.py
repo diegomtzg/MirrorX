@@ -1,11 +1,15 @@
 import weatherManager
 import timeManager
 import quotesManager
+import calendarManager
 
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
+
+# Disclaimer: None of the code in this repo is neatly written or follows any sort of self-respecting coding standards.. this was all done
+# in the span of 3ish days lol rip
 
 # Constants
 small_fontsize = 12
@@ -24,7 +28,7 @@ class mainUI():
         self.initUI()
 
     def initUI(self):
-        self.qt.showFullScreen()
+        self.qt.show()
 
         #Install signal filter to receive 'q' clicks to be able to quit app
         filter = QKeyFilter(self.qt)
@@ -37,13 +41,16 @@ class mainUI():
 
         self.qt.hbox1 = QHBoxLayout() # Horizontal relative layout
         self.qt.hbox2 = QHBoxLayout()
+        self.qt.hbox3 = QHBoxLayout()
         self.qt.welcomeBox = QHBoxLayout()
 
         self.qt.vbox = QVBoxLayout()
         self.qt.vbox.addLayout(self.qt.hbox1)
         self.qt.vbox.addStretch(1)
+        self.qt.vbox.addLayout(self.qt.hbox3)
         self.qt.vbox.addLayout(self.qt.welcomeBox)
         self.qt.vbox.addLayout(self.qt.hbox2)
+
 
         self.qt.setLayout(self.qt.vbox)
         self.update_check()
@@ -67,13 +74,16 @@ class mainUI():
             # Add clock/date and weather widgets
             self.qt.clock = timeManager.DateAndTime()
             self.qt.weather = weatherManager.Weather()
+            self.qt.calendar = calendarManager.Calendar()
 
             self.qt.clock.setFixedHeight(150)
             self.qt.weather.setFixedHeight(150)
+            self.qt.calendar.setFixedHeight(150)
 
-            # Add weather and clock widgets
+            # Add weather, calendar and clock widgets
             self.qt.hbox1.addWidget(self.qt.weather)
             self.qt.hbox1.addWidget(self.qt.clock)
+            self.qt.hbox3.addWidget(self.qt.calendar)
 
             # Add welcome message
             font = QFont('Helvetica', xlarge_fontsize)
@@ -149,7 +159,7 @@ def findFaceAndSetName():
             print("Identified %s" % name['name'])
             break
 
-    PERSON_NAME = name['name']
+    PERSON_NAME = "Diego"
     PERSON_ID = res[0]
 
     faceGoneAndRestart()
@@ -197,7 +207,7 @@ if __name__ == '__main__':
     import threading as T
     import cv2
 
-    cam = cv2.VideoCapture(1)
+    cam = cv2.VideoCapture(0) # TODO change to 1 for webcam
     imgPath = 'data/mostRecentFace.jpg'
 
     smartMirrorApp = QApplication(sys.argv)  # Create application (runnable from command line)
