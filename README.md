@@ -4,6 +4,7 @@
 
 ## Features
  * Weather  
+ * Daily meetings from Google Calendar
  * Current time/date
  * Randomized Motivational Quote Generation
  * Face Recognition through Microsoft Cognitive Services
