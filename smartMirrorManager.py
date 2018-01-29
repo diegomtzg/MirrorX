@@ -15,7 +15,7 @@ from PyQt5.QtCore import *
 small_fontsize = 12
 med_fontsize = 22
 large_fontsize = 32
-xlarge_fontsize = 45
+xlarge_fontsize = 50
 global smartMirrorApp
 
 PERSON_NAME = ""
@@ -28,7 +28,7 @@ class mainUI():
         self.initUI()
 
     def initUI(self):
-        self.qt.show()
+        self.qt.showFullScreen()
 
         #Install signal filter to receive 'q' clicks to be able to quit app
         filter = QKeyFilter(self.qt)
@@ -47,10 +47,9 @@ class mainUI():
         self.qt.vbox = QVBoxLayout()
         self.qt.vbox.addLayout(self.qt.hbox1)
         self.qt.vbox.addStretch(1)
-        self.qt.vbox.addLayout(self.qt.hbox3)
         self.qt.vbox.addLayout(self.qt.welcomeBox)
+        self.qt.vbox.addLayout(self.qt.hbox3)
         self.qt.vbox.addLayout(self.qt.hbox2)
-
 
         self.qt.setLayout(self.qt.vbox)
         self.update_check()

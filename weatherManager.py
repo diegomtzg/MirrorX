@@ -144,6 +144,7 @@ class Weather(QWidget):
             if self.forecast != newForecast:
                 self.forecast = newForecast
                 newForecast = newForecast.replace("<", "less than")
+                newForecast = newForecast.replace(">", "more than")
                 temp = "<font color='white'>" + newForecast + "</font>"
                 self.forecastLabel.setText(temp)
 

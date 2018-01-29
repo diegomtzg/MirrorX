@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
 import numpy as np
 
-small_fontsize = 20
+small_fontsize = 22
 med_fontsize = 25
 large_fontsize = 35
 xlarge_fontsize = 45
@@ -55,7 +55,7 @@ class Quotes(QWidget):
             if len(quote) > 80:
                 (quote, author) = QUOTES[np.random.randint(len(QUOTES))]
 
-            tempQuote = "<font color='white'>" + quote + "</font>"
+            tempQuote = "<font color='white'>\"" + quote + "\"</font>"
             author = data["quoteAuthor"]
             if len(author) < 2:
                 author = "Unknown"
