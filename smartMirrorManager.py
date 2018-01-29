@@ -159,7 +159,7 @@ def findFaceAndSetName():
             print("Identified %s" % name['name'])
             break
 
-    PERSON_NAME = "Diego"
+    PERSON_NAME = name['name']
     PERSON_ID = res[0]
 
     faceGoneAndRestart()
