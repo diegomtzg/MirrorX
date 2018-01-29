@@ -6,24 +6,22 @@ from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
 import numpy as np
 
-small_fontsize = 15
+small_fontsize = 17
 med_fontsize = 25
 large_fontsize = 35
 xlarge_fontsize = 45
 
-QUOTES =  [("Once we accept our limits, we go beyond them", 'Albert Einstein'),
-          ("Carpe Diem", "David Kosbie"),
-          ("Don't cry because it's over, smile because it happened", "Dr. Seuss"),
-          ("Be yourself; everyone is already taken", "Oscar Wilde"),
-          ("We cannot change the cards that we are dealt, just how we play the hand", "Randy Pausch"),
-          ("The brick walls are there for a reason...", "Randy Pausch"),
-          ("Luck is where preparation meets opportunity", "Randy Pausch"),
-          ("Be the change you wish to see in the world", "Ghandi"),
-          ("You only live once, but if you do it right once is enough", "Mae West"),
-          ("Stay hungry, stay foolish", "Steve Jobs"),
-          ("You cannot shake hands with a clenched fist", "Ghandi"),
-          ("The only journey is the one within", "Rainer Rike"),
-          ("Love cures people - both the ones who give it and the ones who receive it", "Karl A. Menninger")
+QUOTES =  [("Once we accept our limits, we go beyond them.", 'Albert Einstein'),
+          ("Don't cry because it's over, smile because it happened.", "Dr. Seuss"),
+          ("Be yourself; everyone is already taken.", "Oscar Wilde"),
+          ("We cannot change the cards that we are dealt, just how we play the hand.", "Randy Pausch"),
+          ("Luck is where preparation meets opportunity.", "Randy Pausch"),
+          ("Be the change you wish to see in the world.", "Ghandi"),
+          ("You only live once, but if you do it right once is enough.", "Mae West"),
+          ("Stay hungry, stay foolish.", "Steve Jobs"),
+          ("You cannot shake hands with a clenched fist.", "Ghandi"),
+          ("The only journey is the one within.", "Rainer Rike"),
+          ("Love cures people - both the ones who give it and the ones who receive it.", "Karl A. Menninger")
 ]
 
 class Quotes(QWidget):
