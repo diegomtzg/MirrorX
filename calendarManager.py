@@ -47,13 +47,17 @@ class Calendar(QWidget):
         self.vbox = QVBoxLayout()
         self.lbl1 = QLabel()
         self.lbl2 = QLabel()
+        self.lbl3 = QLabel()
         self.lbl1.setAlignment(Qt.AlignCenter)
         self.lbl2.setAlignment(Qt.AlignCenter)
+        self.lbl3.setAlignment(Qt.AlignCenter)
         self.vbox.setAlignment(Qt.AlignCenter)
         self.vbox.addWidget(self.lbl1)
         self.vbox.addWidget(self.lbl2)
+        self.vbox.addWidget(self.lbl3)
         self.lbl1.setFont(font1)
         self.lbl2.setFont(font1)
+        self.lbl3.setFont(font1)
         self.setLayout(self.vbox)
         self.getNextMeeting()
 
@@ -99,13 +103,15 @@ class Calendar(QWidget):
 
                     if(num_events_today > 1):
                         text1 = "You have " + str(num_events_today) + " meetings" + " today."
-                        text2 = "The first one is: " + events[0]['summary'] + ", which starts at " + start + " and ends at " + end
+                        text2 = "The first one is: " + events[0]['summary']
+                        text3 = "It starts at " + start + " and ends at " + end
                     else:
                         text1 = "You only have one meeting today: " + event['summary']
                         text2 = "It starts at " + start + " and ends at " + end
 
                     self.lbl1.setText("<font color='white'>" + text1  + "</font>")
                     self.lbl2.setText("<font color='white'>" + text2 + ".</font>")
+                    self.lbl3.setText("<font color='white'>" + text3 + ".</font>")
 
 
     def get_credentials(self):
