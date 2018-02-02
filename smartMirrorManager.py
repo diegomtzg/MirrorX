@@ -4,18 +4,20 @@ import quotesManager
 import calendarManager
 
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
 
 # Disclaimer: None of the code in this repo is neatly written or follows any sort of self-respecting coding standards.. this was all done
 # in the span of 3ish days lol rip
 
+# TODO: Change welcome to good morning/afternoon based on time of day
+
 # Constants
 small_fontsize = 12
-med_fontsize = 22
+med_fontsize = 28
 large_fontsize = 32
-xlarge_fontsize = 50
+xlarge_fontsize = 70
 global smartMirrorApp
 
 PERSON_NAME = ""
@@ -76,7 +78,7 @@ class mainUI():
             self.qt.calendar = calendarManager.Calendar()
 
             self.qt.clock.setFixedHeight(150)
-            self.qt.weather.setFixedHeight(150)
+            self.qt.weather.setFixedSize(800, 200)
             self.qt.calendar.setFixedHeight(150)
 
             # Add weather, calendar and clock widgets

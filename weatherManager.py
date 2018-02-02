@@ -1,25 +1,16 @@
-from smartMirrorManager import *
-import threading
-import time
 import requests
 import json
-import cv2
-from PyQt5.QtGui import QImage, QPixmap
-from smartMirrorManager import *
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout, QSizePolicy
+import smartMirrorManager
+from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+import cv2
 
-# Constants
-small_fontsize = 20
-med_fontsize = 25
-large_fontsize = 35
-xlarge_fontsize = 45
 weather_api_token = '9435a4c25a087440d56cc46775e1eb0d'
 
-font1 = QFont('Helvetica', small_fontsize)
-font2 = QFont('Helvetica', med_fontsize)
-font3 = QFont('Helvetica', large_fontsize)
+font1 = QFont('Helvetica', smartMirrorManager.med_fontsize)
+font2 = QFont('Helvetica', smartMirrorManager.med_fontsize)
+font3 = QFont('Helvetica', smartMirrorManager.large_fontsize)
 
 icon_lookup = {
     'clear-day': "assets/Sun.png",  # clear sky day

@@ -1,4 +1,3 @@
-
 from __future__ import print_function
 
 import dateutil.parser
@@ -12,17 +11,11 @@ from oauth2client import tools
 from oauth2client.file import Storage
 
 import datetime
+import smartMirrorManager
 
-from smartMirrorManager import *
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-
-# Constants
-small_fontsize = 12
-med_fontsize = 22
-large_fontsize = 32
-xlarge_fontsize = 41
 
 try:
     import argparse
@@ -42,7 +35,7 @@ class Calendar(QWidget):
         self.initUI()
 
     def initUI(self):
-        font1 = QFont('Helvetica', med_fontsize)
+        font1 = QFont('Helvetica', smartMirrorManager.med_fontsize)
 
         self.vbox = QVBoxLayout()
         self.lbl1 = QLabel()
@@ -90,6 +83,8 @@ class Calendar(QWidget):
             if num_events_today == 0:
                 self.lbl1.setText("<font color='white'>" + "Time to relax!" + "</font>")
                 self.lbl2.setText("<font color='white'>" + "Looks like you have no upcoming events today." + "</font>")
+                self.lbl3.setText("<font color='white'>" + "Enjoy!" + "</font>")
+
             else:
                 event = events[0]
                 event_date = dateutil.parser.parse(event['start'].get('dateTime', event['start'].get('date'))).strftime("%d")
@@ -98,20 +93,19 @@ class Calendar(QWidget):
                     start = dateutil.parser.parse(event['start'].get('dateTime', event['start'].get('date'))).strftime("%I:%M %p")
                     end = dateutil.parser.parse(event['end'].get('dateTime', event['end'].get('date'))).strftime("%I:%M %p")
                     title = event['summary']
-                    text1 = ""
-                    text2 = ""
 
                     if(num_events_today > 1):
-                        text1 = "You have " + str(num_events_today) + " meetings" + " today."
-                        text2 = "The first one is: " + events[0]['summary']
-                        text3 = "It starts at " + start + " and ends at " + end
+                        text1 = "You have " + str(num_events_today) + " upcoming meetings" + " today."
+                        text2 = "The next one is: " + events[0]['summary']
+                        text3 = "It starts at " + start + " and ends at " + end + "."
                     else:
-                        text1 = "You only have one meeting today: " + event['summary']
-                        text2 = "It starts at " + start + " and ends at " + end
+                        text1 = "You have one upcoming meeting today: " + event['summary']
+                        text2 = "It starts at " + start + " and ends at " + end + "."
+                        text3 = "Good luck!"
 
                     self.lbl1.setText("<font color='white'>" + text1  + "</font>")
                     self.lbl2.setText("<font color='white'>" + text2 + ".</font>")
-                    self.lbl3.setText("<font color='white'>" + text3 + ".</font>")
+                    self.lbl3.setText("<font color='white'>" + text3 + "</font>")
 
 
     def get_credentials(self):
