@@ -47,6 +47,10 @@ class Quotes(QWidget):
             s = res.text
             data = json.loads(s)
             quote = data["quoteText"]
+            author = data["quoteAuthor"]
+            if len(author) < 2:
+                author = "Unknown"
+
             if len(quote) > 80:
                 (quote, author) = QUOTES[np.random.randint(len(QUOTES))]
 
@@ -56,9 +60,6 @@ class Quotes(QWidget):
             quote = quote.replace("\" ", "")
 
             tempQuote = "<font color='white'>\"" + quote + "\"</font>"
-            author = data["quoteAuthor"]
-            if len(author) < 2:
-                author = "Unknown"
             tempAuthor = "<font color='white'>-" + author + "</font>"
             self.lbl1.setText(tempQuote)
             self.lbl2.setText(tempAuthor)
