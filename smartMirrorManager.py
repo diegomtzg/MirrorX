@@ -77,8 +77,8 @@ class mainUI():
             self.qt.weather = weatherManager.Weather()
             self.qt.calendar = calendarManager.Calendar()
 
-            self.qt.clock.setFixedHeight(150)
-            self.qt.weather.setFixedSize(800, 200)
+            self.qt.clock.setFixedHeight(300)
+            self.qt.weather.setFixedSize(800, 300)
             self.qt.calendar.setFixedHeight(150)
 
             # Add weather, calendar and clock widgets

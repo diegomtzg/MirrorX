@@ -50,7 +50,11 @@ class Quotes(QWidget):
             if len(quote) > 80:
                 (quote, author) = QUOTES[np.random.randint(len(QUOTES))]
 
+            # Get rid of all trailing white space and random quotes placed by shady quote API service
             quote = quote.replace("\"", "")
+            quote = quote.replace(" \"", "")
+            quote = quote.replace("\" ", "")
+
             tempQuote = "<font color='white'>\"" + quote + "\"</font>"
             author = data["quoteAuthor"]
             if len(author) < 2:
