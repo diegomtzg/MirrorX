@@ -13,14 +13,14 @@ class DateAndTime(QWidget):
 
     def initUI(self):
         font1 = QFont('Helvetica', smartMirrorManager.large_fontsize)
-        font2 = QFont('Helvetica', smartMirrorManager.med_fontsize)
+        font2 = QFont('Helvetica', 50)
 
         self.vbox = QVBoxLayout()
         self.time = ''
         self.timeLabel = QLabel()
         self.vbox.setAlignment(Qt.AlignRight)
         self.timeLabel.setAlignment(Qt.AlignRight)
-        self.timeLabel.setFont(font1)
+        self.timeLabel.setFont(font2)
         self.timeLabel.setText("<font color='white'>temp time</font>")
 
         self.weekday = ''
