@@ -11,8 +11,8 @@ CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'MirrorX'
 
 NEWS_API_KEY = "3e115fc75b1744a685b212b8b66acf6a" # From newsapi.org
-NEWS_SOURCE = "abc-news" # From https://newsapi.org/sources
-MAX_HEADLINES = 6
+NEWS_SOURCE = "abc-news,the-wall-street-journal" # From https://newsapi.org/sources
+MAX_HEADLINES = 5
 
 class News(QWidget):
     def __init__(self):
@@ -21,7 +21,7 @@ class News(QWidget):
 
     def initUI(self):
         self.titleFont = QFont('Helvetica', smartMirrorManager.title_fontsize)
-        self.newsContentFont = QFont('Helvetica', smartMirrorManager.med_fontsize)
+        self.newsContentFont = QFont('Helvetica', 20)
 
         self.newsTitleBox = QHBoxLayout()
         self.newsContentBox = QVBoxLayout() # News headlines + title
@@ -53,20 +53,14 @@ class News(QWidget):
         response = requests.get(news_req_url)
         news_json = json.loads(response.text)
 
-        j = 1
         for i in range(0, MAX_HEADLINES):
             headline = news_json['articles'][i]['title']
-
-            # Skip long headlines
-            while(len(headline) > 70):
-                headline = news_json['articles'][i + j]['title']
-                j = j+1
 
             if headline[-1] != '?':
                 headline =  headline + "."
 
             newHeadline = QLabel("<font color='white'>• " + headline + "</font>")
             newHeadline.setWordWrap(QFormLayout.WrapAllRows)
-            newHeadline.setAlignment(Qt.AlignJustify)
+            newHeadline.setAlignment(Qt.AlignCenter)
             newHeadline.setFont(self.newsContentFont)
             self.newsRows.addRow(newHeadline)

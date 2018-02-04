@@ -61,6 +61,12 @@ class Quotes(QWidget):
             if len(quote) > 80:
                 (quote, author) = QUOTES[np.random.randint(len(QUOTES))]
 
+            # Get rid of quotes with weird characters in them
+            for i in range (0, len(quote)):
+                asciiVal = ord(quote[i])
+                if(asciiVal > 126 or asciiVal < 32):
+                    (quote, author) = QUOTES[np.random.randint(len(QUOTES))]
+
             # Get rid of all trailing white space and random quotes placed by shady quote API service
             quote = quote.replace("\" ", "")
             quote = quote.rstrip(" ")
@@ -73,5 +79,4 @@ class Quotes(QWidget):
         except Exception as e:
             (quote, author) = QUOTES[np.random.randint(len(QUOTES))]
             self.lbl1.setText("<font color='white'>\"" + quote + "\"</font>")
-            self.lbl2.setText("<font color='white'>-" + author + "</font>")
-
+            self.lbl2.setText("<font color='white'>–" + author + "</font>")
