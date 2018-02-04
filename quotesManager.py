@@ -55,9 +55,8 @@ class Quotes(QWidget):
                 (quote, author) = QUOTES[np.random.randint(len(QUOTES))]
 
             # Get rid of all trailing white space and random quotes placed by shady quote API service
-            quote = quote.replace("\"", "")
-            quote = quote.replace(" \"", "")
             quote = quote.replace("\" ", "")
+            quote = quote.rstrip(" ")
 
             tempQuote = "<font color='white'>\"" + quote + "\"</font>"
             tempAuthor = "<font color='white'>-" + author + "</font>"

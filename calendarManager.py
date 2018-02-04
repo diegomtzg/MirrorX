@@ -13,21 +13,13 @@ from oauth2client.file import Storage
 import datetime
 import smartMirrorManager
 
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QVBoxLayout, QFormLayout
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
-try:
-    import argparse
-    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-except ImportError:
-    flags = None
-
-# If modifying these scopes, delete your previously saved credentials
-# at ~/.credentials/calendar-python-quickstart.json
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
-APPLICATION_NAME = 'mirrorX'
+APPLICATION_NAME = 'MirrorX'
 
 class Calendar(QWidget):
     def __init__(self):
@@ -35,77 +27,84 @@ class Calendar(QWidget):
         self.initUI()
 
     def initUI(self):
-        font1 = QFont('Helvetica', smartMirrorManager.med_fontsize)
+        self.titleFont = QFont('Helvetica', 40)
+        self.contentFont = QFont('Helvetica', smartMirrorManager.med_fontsize)
 
-        self.vbox = QVBoxLayout()
-        self.lbl1 = QLabel()
-        self.lbl2 = QLabel()
-        self.lbl3 = QLabel()
-        self.lbl1.setAlignment(Qt.AlignCenter)
-        self.lbl2.setAlignment(Qt.AlignCenter)
-        self.lbl3.setAlignment(Qt.AlignCenter)
-        self.vbox.setAlignment(Qt.AlignCenter)
-        self.vbox.addWidget(self.lbl1)
-        self.vbox.addWidget(self.lbl2)
-        self.vbox.addWidget(self.lbl3)
-        self.lbl1.setFont(font1)
-        self.lbl2.setFont(font1)
-        self.lbl3.setFont(font1)
-        self.setLayout(self.vbox)
-        self.getNextMeeting()
+        self.calendarBox = QHBoxLayout()
 
-    def getNextMeeting(self):
-        # Creates a Google Calendar API service object and outputs a list of the next 10 events on the user's calendar.
+        self.titleBox = QHBoxLayout()
+        self.contentBox = QVBoxLayout() # Calendar + title
+        self.dummyBox = QHBoxLayout()
 
+        self.calendarTitle = QLabel("<font color='white'>Today's Events</font>")
+        self.calendarTitle.setFont(self.titleFont)
+        self.calendarTitle.setAlignment(Qt.AlignCenter)
+        self.titleBox.addWidget(self.calendarTitle)
+        self.contentBox.addLayout(self.titleBox)
+
+        self.calendarRows = QFormLayout()
+        self.calendarRows.setVerticalSpacing(20)
+        self.calendarRows.setHorizontalSpacing(25)
+        self.calendarRows.setAlignment(Qt.AlignLeft)
+        self.contentBox.addLayout(self.calendarRows)
+
+        # Empty placeholder box to have the calendar align itself to the left of the screen
+        self.dummyBox = QVBoxLayout()
+        self.dummyBox.setAlignment(Qt.AlignRight)
+
+        self.calendarBox.addLayout(self.contentBox)
+        self.calendarBox.addStretch(1)
+        self.calendarBox.addLayout(self.dummyBox)
+
+        self.setLayout(self.calendarBox)
+
+        self.getDailyEvents()
+        # TODO get updates
+
+    def getDailyEvents(self):
+        # Creates a Google Calendar API service object gets the daily meetings for someone (max is 10)
         credentials = self.get_credentials()
         http = credentials.authorize(httplib2.Http())
         service = discovery.build('calendar', 'v3', http=http)
 
-        now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-        print('Getting the upcoming 10 events')
+        now = datetime.datetime.now().isoformat() + 'Z' # 'Z' indicates UTC
         eventsResult = service.events().list(
-            calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
-            orderBy='startTime').execute()
+            calendarId='primary', timeMin=now, maxResults=10, singleEvents=True, orderBy='startTime').execute()
         events = eventsResult.get('items', [])
 
-        if not events:
-            self.lbl1.setText("<font color='white'>" + "Time to relax!" + "</font>")
-            self.lbl2.setText("<font color='white'>" + "Looks like you have no upcoming events today." + "</font>")
-        else:
-            curr_date = time.strftime("%d")
-            num_events_today = 0
+        curr_date = time.strftime("%d")
+        num_events_today = 0
+        for event in events:
+            event_date = dateutil.parser.parse(event['start'].get('dateTime', event['start'].get('date'))).strftime("%d")
+            if (curr_date == event_date):
+                num_events_today = num_events_today + 1
 
+        if not events or num_events_today == 0:
+            relaxLabel = QLabel("<font color='white'>Time to Relax!</font>")
+            relaxLabel.setAlignment(Qt.AlignCenter)
+            noEventsLabel = QLabel("<font color='white'>No scheduled events today.</font>")
+            relaxLabel.setFont(self.contentFont)
+            noEventsLabel.setFont(self.contentFont)
+            self.calendarRows.addRow(relaxLabel, noEventsLabel)
+
+        else:
             for event in events:
                 event_date = dateutil.parser.parse(event['start'].get('dateTime', event['start'].get('date'))).strftime("%d")
-                if (curr_date == event_date):
-                    num_events_today = num_events_today + 1
 
-            if num_events_today == 0:
-                self.lbl1.setText("<font color='white'>" + "Time to relax!" + "</font>")
-                self.lbl2.setText("<font color='white'>" + "Looks like you have no upcoming events today." + "</font>")
-                self.lbl3.setText("<font color='white'>" + "Enjoy!" + "</font>")
-
-            else:
-                event = events[0]
-                event_date = dateutil.parser.parse(event['start'].get('dateTime', event['start'].get('date'))).strftime("%d")
-
+                # Retrieved event may be for next day, ensure that it is today
                 if(curr_date == event_date):
-                    start = dateutil.parser.parse(event['start'].get('dateTime', event['start'].get('date'))).strftime("%I:%M %p")
-                    end = dateutil.parser.parse(event['end'].get('dateTime', event['end'].get('date'))).strftime("%I:%M %p")
-                    title = event['summary']
+                    eventStart = dateutil.parser.parse(event['start'].get('dateTime', event['start'].get('date'))).strftime("%I:%M %p").lstrip('0')
+                    eventEnd = dateutil.parser.parse(event['end'].get('dateTime', event['end'].get('date'))).strftime("%I:%M %p").lstrip('0')
+                    eventName = event['summary']
 
-                    if(num_events_today > 1):
-                        text1 = "You have " + str(num_events_today) + " upcoming meetings" + " today."
-                        text2 = "The next one is: " + events[0]['summary']
-                        text3 = "It starts at " + start + " and ends at " + end + "."
-                    else:
-                        text1 = "You have one upcoming meeting today: " + event['summary']
-                        text2 = "It starts at " + start + " and ends at " + end + "."
-                        text3 = "Good luck!"
-
-                    self.lbl1.setText("<font color='white'>" + text1  + "</font>")
-                    self.lbl2.setText("<font color='white'>" + text2 + ".</font>")
-                    self.lbl3.setText("<font color='white'>" + text3 + "</font>")
+                    newEventName = QLabel("<font color='white'>" + eventName + "</font>")
+                    newEventName.setFixedWidth(300)
+                    newEventName.setWordWrap(True)
+                    newEventName.setAlignment(Qt.AlignLeft)
+                    newEventTime = QLabel("<font color='white'>" + eventStart + " - " + eventEnd + "</font>")
+                    newEventName.setFont(self.contentFont)
+                    newEventTime.setFont(self.contentFont)
+                    self.calendarRows.addRow(newEventName, newEventTime)
 
 
     def get_credentials(self):
@@ -122,9 +121,6 @@ class Calendar(QWidget):
         if not credentials or credentials.invalid:
             flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
             flow.user_agent = APPLICATION_NAME
-            if flags:
-                credentials = tools.run_flow(flow, store, flags)
-            else: # Needed only for compatibility with Python 2.6
-                credentials = tools.run(flow, store)
-            print('Storing credentials to ' + credential_path)
+            credentials = tools.run_flow(flow, store, flags)
+
         return credentials

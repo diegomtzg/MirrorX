@@ -8,9 +8,8 @@ import cv2
 
 weather_api_token = '9435a4c25a087440d56cc46775e1eb0d'
 
-font1 = QFont('Helvetica', smartMirrorManager.med_fontsize)
-font2 = QFont('Helvetica', smartMirrorManager.med_fontsize)
-font3 = QFont('Helvetica', smartMirrorManager.large_fontsize)
+weatherFont = QFont('Helvetica', smartMirrorManager.med_fontsize)
+temperatureFont = QFont('Helvetica', smartMirrorManager.large_fontsize)
 
 icon_lookup = {
     'clear-day': "assets/Sun.png",  # clear sky day
@@ -43,18 +42,18 @@ class Weather(QWidget):
         self.icon = ''
 
         self.tempLabel = QLabel()
-        self.tempLabel.setFont(font3)
+        self.tempLabel.setFont(temperatureFont)
         self.tempLabel.setText("<font color='white'>temporary temp</font>")
         self.iconLabel = QLabel()
         self.currentlyLabel = QLabel()
-        self.currentlyLabel.setFont(font2)
+        self.currentlyLabel.setFont(weatherFont)
         self.currentlyLabel.setText("<font color='white'>temporary curr</font>")
         self.forecastLabel = QLabel()
-        self.forecastLabel.setFont(font1)
+        self.forecastLabel.setFont(weatherFont)
         self.forecastLabel.setWordWrap(True)
         self.forecastLabel.setText("<font color='white'>temporary forecast</font>")
         self.locLabel = QLabel()
-        self.locLabel.setFont(font1)
+        self.locLabel.setFont(weatherFont)
         self.locLabel.setText("<font color='white'>temporary loc</font>")
 
         self.hbox = QHBoxLayout()
