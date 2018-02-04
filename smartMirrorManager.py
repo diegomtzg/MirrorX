@@ -40,14 +40,16 @@ class mainUI():
         self.qt.setPalette(self.darkPalette)
 
         self.qt.weatherClockHBox = QHBoxLayout()
-        self.qt.calendarNewsHBox = QHBoxLayout()
+        self.qt.calendarHBox = QHBoxLayout()
+        self.qt.newsHBox = QHBoxLayout()
         self.qt.welcomeHBox = QHBoxLayout()
         self.qt.quotesHBox = QHBoxLayout()
 
         self.qt.verticalMirrorBox = QVBoxLayout()
         self.qt.verticalMirrorBox.addLayout(self.qt.weatherClockHBox)
-        self.qt.verticalMirrorBox.addLayout(self.qt.calendarNewsHBox)
+        self.qt.verticalMirrorBox.addLayout(self.qt.calendarHBox)
         self.qt.verticalMirrorBox.addStretch(1)
+        self.qt.verticalMirrorBox.addLayout(self.qt.newsHBox)
         self.qt.verticalMirrorBox.addLayout(self.qt.welcomeHBox)
         self.qt.verticalMirrorBox.addLayout(self.qt.quotesHBox)
 
@@ -77,18 +79,15 @@ class mainUI():
             self.qt.news = newsManager.News()
 
             self.qt.clock.setFixedHeight(300)
-            self.qt.weather.setFixedSize(580, 300)
-            self.qt.news.setFixedWidth(800)
-
-            dummyLabel = QLabel()
-            dummyLabel.setFixedWidth(240)
+            self.qt.weather.setFixedSize(400, 300)
 
             # Add weather, calendar and clock widgets
             self.qt.weatherClockHBox.addWidget(self.qt.weather)
             self.qt.weatherClockHBox.addWidget(self.qt.clock)
-            self.qt.calendarNewsHBox.addWidget(self.qt.news)
-            self.qt.calendarNewsHBox.addWidget(dummyLabel) # For spacing
-            self.qt.calendarNewsHBox.addWidget(self.qt.calendar)
+            self.qt.calendarHBox.addWidget(self.qt.calendar)
+
+            # Add news widget
+            self.qt.newsHBox.addWidget(self.qt.news)
 
             # Add welcome message
             font = QFont('Helvetica', xlarge_fontsize)
@@ -106,7 +105,8 @@ class mainUI():
 
         if STARTED and PERSON_NAME == "" and PERSON_ID == "":
             mainUI.clearLayout(self.qt.weatherClockHBox)
-            mainUI.clearLayout(self.qt.calendarNewsHBox)
+            mainUI.clearLayout(self.qt.calendarHBox)
+            mainUI.clearLayout(self.qt.newsHBox)
             mainUI.clearLayout(self.qt.quotesHBox)
             mainUI.clearLayout(self.qt.welcomeHBox)
 

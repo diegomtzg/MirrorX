@@ -34,16 +34,14 @@ class Calendar(QWidget):
 
     def initUI(self):
         self.titleFont = QFont('Helvetica', smartMirrorManager.title_fontsize)
-        self.contentFont = QFont('Helvetica', smartMirrorManager.med_fontsize)
+        self.contentFont = QFont('Helvetica', 20)
 
         self.calendarRows = QFormLayout()
         self.calendarRows.setVerticalSpacing(20)
-        self.calendarRows.setHorizontalSpacing(10)
-        self.calendarRows.setAlignment(Qt.AlignAbsolute)
+        self.calendarRows.setHorizontalSpacing(20)
 
         self.calendarTitle = QLabel("<font color='white'>Today's Events</font>")
         self.calendarTitle.setFont(self.titleFont)
-        self.calendarTitle.setAlignment(Qt.AlignCenter)
         self.calendarRows.addRow(self.calendarTitle)
 
         self.setLayout(self.calendarRows)
@@ -75,9 +73,7 @@ class Calendar(QWidget):
 
         if not events or num_events_today == 0:
             relaxLabel = QLabel("<font color='white'>Time to Relax!</font>")
-            relaxLabel.setAlignment(Qt.AlignCenter)
             noEventsLabel = QLabel("<font color='white'>No scheduled events today.</font>")
-            noEventsLabel.setAlignment(Qt.AlignCenter)
             relaxLabel.setFont(self.contentFont)
             noEventsLabel.setFont(self.contentFont)
             self.calendarRows.addRow(relaxLabel)
@@ -94,10 +90,9 @@ class Calendar(QWidget):
                     eventName = event['summary']
 
                     newEventName = QLabel("<font color='white'>" + eventName + "</font>")
-                    newEventName.setFixedWidth(300)
                     newEventName.setWordWrap(True)
                     newEventName.setAlignment(Qt.AlignCenter)
-                    newEventTime = QLabel("<font color='white'>" + eventStart + " - " + eventEnd + "</font>")
+                    newEventTime = QLabel("<font color='white'>" + eventStart + "</font>")
                     newEventName.setFont(self.contentFont)
                     newEventTime.setFont(self.contentFont)
                     self.calendarRows.addRow(newEventName, newEventTime)
