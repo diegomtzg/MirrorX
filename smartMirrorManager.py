@@ -1,20 +1,21 @@
+import calendarManager
 import weatherManager
 import timeManager
 import quotesManager
-import calendarManager
+import newsManager
 
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QFormLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
-
-# TODO: Change welcome to good morning/afternoon based on time of day
 
 # Constants
 small_fontsize = 12
 med_fontsize = 26
 large_fontsize = 32
 xlarge_fontsize = 70
+title_fontsize = 50
+
 global smartMirrorApp
 
 PERSON_NAME = ""
@@ -39,13 +40,13 @@ class mainUI():
         self.qt.setPalette(self.darkPalette)
 
         self.qt.weatherClockHBox = QHBoxLayout()
-        self.qt.quotesHBox = QHBoxLayout()
-        self.qt.calendarHBox = QHBoxLayout()
+        self.qt.calendarNewsHBox = QHBoxLayout()
         self.qt.welcomeHBox = QHBoxLayout()
+        self.qt.quotesHBox = QHBoxLayout()
 
         self.qt.verticalMirrorBox = QVBoxLayout()
         self.qt.verticalMirrorBox.addLayout(self.qt.weatherClockHBox)
-        self.qt.verticalMirrorBox.addLayout(self.qt.calendarHBox)
+        self.qt.verticalMirrorBox.addLayout(self.qt.calendarNewsHBox)
         self.qt.verticalMirrorBox.addStretch(1)
         self.qt.verticalMirrorBox.addLayout(self.qt.welcomeHBox)
         self.qt.verticalMirrorBox.addLayout(self.qt.quotesHBox)
@@ -73,14 +74,21 @@ class mainUI():
             self.qt.clock = timeManager.DateAndTime()
             self.qt.weather = weatherManager.Weather()
             self.qt.calendar = calendarManager.Calendar()
+            self.qt.news = newsManager.News()
 
             self.qt.clock.setFixedHeight(300)
             self.qt.weather.setFixedSize(580, 300)
+            self.qt.news.setFixedWidth(800)
+
+            dummyLabel = QLabel()
+            dummyLabel.setFixedWidth(240)
 
             # Add weather, calendar and clock widgets
             self.qt.weatherClockHBox.addWidget(self.qt.weather)
             self.qt.weatherClockHBox.addWidget(self.qt.clock)
-            self.qt.calendarHBox.addWidget(self.qt.calendar)
+            self.qt.calendarNewsHBox.addWidget(self.qt.news)
+            self.qt.calendarNewsHBox.addWidget(dummyLabel) # For spacing
+            self.qt.calendarNewsHBox.addWidget(self.qt.calendar)
 
             # Add welcome message
             font = QFont('Helvetica', xlarge_fontsize)
@@ -98,7 +106,7 @@ class mainUI():
 
         if STARTED and PERSON_NAME == "" and PERSON_ID == "":
             mainUI.clearLayout(self.qt.weatherClockHBox)
-            mainUI.clearLayout(self.qt.calendarHBox)
+            mainUI.clearLayout(self.qt.calendarNewsHBox)
             mainUI.clearLayout(self.qt.quotesHBox)
             mainUI.clearLayout(self.qt.welcomeHBox)
 
@@ -149,10 +157,9 @@ def findFaceAndSetName():
         success, image = cam.read()
         if not success: continue
         cv2.imwrite(imgPath, image)
-        # print('PHOTO SAVED')
         res = identifyPersonInImage(imgPath)
         print(res)
-        if (len(res) == 1): # must only have one face
+        if (len(res) == 1): # Must only have one face
             name = getPerson(res[0])
             print("Identified %s" % name['name'])
             break
@@ -171,11 +178,9 @@ def faceGoneAndRestart():
     num_count = 0
     while(num_count < 100):
         time.sleep(0.5)
-        # cam.retrieve()
         success, image = cam.read()
         if not success: continue
         cv2.imwrite(imgPath, image)
-        # print('PHOTO SAVED')
         res = identifyPersonInImage(imgPath)
         if (len(res) == 0 or PERSON_ID not in res): # must only have one face
             print("Identified no face of %s! Count %d " % (PERSON_NAME, num_count))

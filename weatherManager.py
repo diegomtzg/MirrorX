@@ -8,9 +8,6 @@ import cv2
 
 weather_api_token = '9435a4c25a087440d56cc46775e1eb0d'
 
-weatherFont = QFont('Helvetica', smartMirrorManager.med_fontsize)
-temperatureFont = QFont('Helvetica', smartMirrorManager.large_fontsize)
-
 icon_lookup = {
     'clear-day': "assets/Sun.png",  # clear sky day
     'wind': "assets/Wind.png",   #wind
@@ -33,6 +30,9 @@ class Weather(QWidget):
         self.initUI()
 
     def initUI(self):
+        weatherFont = QFont('Helvetica', smartMirrorManager.med_fontsize)
+        temperatureFont = QFont('Helvetica', 45)
+
         self.vbox = QVBoxLayout()
 
         self.temperature = ''
@@ -71,6 +71,7 @@ class Weather(QWidget):
         self.vbox.addLayout(self.vbox1)
         self.vbox.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.vbox)
+
         self.getWeather()
         self.updateWeather()
 

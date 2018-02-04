@@ -40,6 +40,7 @@ class DateAndTime(QWidget):
         self.vbox.addStretch(2)
         self.setContentsMargins(0,0,0,0)
         self.setLayout(self.vbox)
+
         self.updateTime()
 
     def updateTime(self):

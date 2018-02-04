@@ -38,7 +38,14 @@ class Quotes(QWidget):
         self.lbl1.setFont(font1)
         self.lbl2.setFont(font1)
         self.setLayout(self.vbox)
+
         self.quotes_get()
+        self.updateQuotes()
+
+    def updateQuotes(self):
+            self.timer = QTimer(self)
+            self.timer.timeout.connect(self.quotes_get)
+            self.timer.start(1000 * 60 * 10)  # Update quote every 10 minutes
 
     def quotes_get(self):
         try:
