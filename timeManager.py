@@ -13,7 +13,7 @@ class DateAndTime(QWidget):
 
     def initUI(self):
         font1 = QFont('Helvetica', smartMirrorManager.large_fontsize)
-        font2 = QFont('Helvetica', 50)
+        font2 = QFont('Helvetica', 60)
 
         self.vbox = QVBoxLayout()
         self.time = ''
@@ -56,13 +56,18 @@ class DateAndTime(QWidget):
         # Make ticker flash in clock
         if(ticker):
             newTime = time.strftime("%I:%M %p")  # ex. hour: 2:45 PM
+            newTime = newTime.lstrip('0') # Remove leading zero from time
             ticker = False
         else:
             newTime = time.strftime("%I %M %p")  # ex. hour: 2:45 PM
+            newTime = newTime.lstrip('0')  # Remove leading zero from time
             ticker = True
 
         newDayOfWeek = time.strftime("%A")
-        newDate = time.strftime("%b %d, %Y")
+        tempMonth = time.strftime("%b")
+        tempDate = time.strftime("%d").lstrip('0') # Remove leading zero from date
+        tempYear = time.strftime("%Y")
+        newDate = tempMonth + " " + tempDate + ", " + tempYear
 
         if newTime != self.time:
             temp = "<font color='white'>" + newTime + "</font>"

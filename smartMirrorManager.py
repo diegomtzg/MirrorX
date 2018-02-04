@@ -4,18 +4,15 @@ import quotesManager
 import calendarManager
 
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QFormLayout
 from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
-
-# Disclaimer: None of the code in this repo is neatly written or follows any sort of self-respecting coding standards.. this was all done
-# in the span of 3ish days lol rip
 
 # TODO: Change welcome to good morning/afternoon based on time of day
 
 # Constants
 small_fontsize = 12
-med_fontsize = 28
+med_fontsize = 26
 large_fontsize = 32
 xlarge_fontsize = 70
 global smartMirrorApp
@@ -41,19 +38,19 @@ class mainUI():
         self.darkPalette.setColor(QPalette.Background, Qt.black)
         self.qt.setPalette(self.darkPalette)
 
-        self.qt.hbox1 = QHBoxLayout() # Horizontal relative layout
-        self.qt.hbox2 = QHBoxLayout()
-        self.qt.hbox3 = QHBoxLayout()
-        self.qt.welcomeBox = QHBoxLayout()
+        self.qt.weatherClockHBox = QHBoxLayout()
+        self.qt.quotesHBox = QHBoxLayout()
+        self.qt.calendarHBox = QHBoxLayout()
+        self.qt.welcomeHBox = QHBoxLayout()
 
-        self.qt.vbox = QVBoxLayout()
-        self.qt.vbox.addLayout(self.qt.hbox1)
-        self.qt.vbox.addStretch(1)
-        self.qt.vbox.addLayout(self.qt.welcomeBox)
-        self.qt.vbox.addLayout(self.qt.hbox3)
-        self.qt.vbox.addLayout(self.qt.hbox2)
+        self.qt.verticalMirrorBox = QVBoxLayout()
+        self.qt.verticalMirrorBox.addLayout(self.qt.weatherClockHBox)
+        self.qt.verticalMirrorBox.addLayout(self.qt.calendarHBox)
+        self.qt.verticalMirrorBox.addStretch(1)
+        self.qt.verticalMirrorBox.addLayout(self.qt.welcomeHBox)
+        self.qt.verticalMirrorBox.addLayout(self.qt.quotesHBox)
 
-        self.qt.setLayout(self.qt.vbox)
+        self.qt.setLayout(self.qt.verticalMirrorBox)
         self.update_check()
 
     def update_check(self):
@@ -78,32 +75,32 @@ class mainUI():
             self.qt.calendar = calendarManager.Calendar()
 
             self.qt.clock.setFixedHeight(300)
-            self.qt.weather.setFixedSize(800, 300)
-            self.qt.calendar.setFixedHeight(150)
+            self.qt.weather.setFixedSize(580, 300)
 
             # Add weather, calendar and clock widgets
-            self.qt.hbox1.addWidget(self.qt.weather)
-            self.qt.hbox1.addWidget(self.qt.clock)
-            self.qt.hbox3.addWidget(self.qt.calendar)
+            self.qt.weatherClockHBox.addWidget(self.qt.weather)
+            self.qt.weatherClockHBox.addWidget(self.qt.clock)
+            self.qt.calendarHBox.addWidget(self.qt.calendar)
 
             # Add welcome message
             font = QFont('Helvetica', xlarge_fontsize)
             self.message = QLabel()
             self.message.setAlignment(Qt.AlignCenter)
             self.message.setFont(font)
-            self.qt.welcomeBox.addWidget(self.message)
+            self.qt.welcomeHBox.addWidget(self.message)
             self.message.setText("<font color='white'>" + "Welcome, " + PERSON_NAME + "</font>")
 
             # Add quotes widget
             self.qt.quotes = quotesManager.Quotes(QWidget())
-            self.qt.hbox2.addWidget(self.qt.quotes)
+            self.qt.quotesHBox.addWidget(self.qt.quotes)
 
             STARTED = True
 
         if STARTED and PERSON_NAME == "" and PERSON_ID == "":
-            mainUI.clearLayout(self.qt.hbox1)
-            mainUI.clearLayout(self.qt.hbox2)
-            mainUI.clearLayout(self.qt.welcomeBox)
+            mainUI.clearLayout(self.qt.weatherClockHBox)
+            mainUI.clearLayout(self.qt.calendarHBox)
+            mainUI.clearLayout(self.qt.quotesHBox)
+            mainUI.clearLayout(self.qt.welcomeHBox)
 
             STARTED = False
 
