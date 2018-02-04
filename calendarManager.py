@@ -17,6 +17,12 @@ from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout, QVBoxLayout, QFormLayo
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
+try:
+    import argparse
+    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+except ImportError:
+    flags = None
+
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'MirrorX'
@@ -27,39 +33,28 @@ class Calendar(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.titleFont = QFont('Helvetica', 40)
+        self.titleFont = QFont('Helvetica', smartMirrorManager.title_fontsize)
         self.contentFont = QFont('Helvetica', smartMirrorManager.med_fontsize)
 
-        self.calendarBox = QHBoxLayout()
-
-        self.titleBox = QHBoxLayout()
-        self.contentBox = QVBoxLayout() # Calendar + title
-        self.dummyBox = QHBoxLayout()
+        self.calendarRows = QFormLayout()
+        self.calendarRows.setVerticalSpacing(20)
+        self.calendarRows.setHorizontalSpacing(10)
+        self.calendarRows.setAlignment(Qt.AlignAbsolute)
 
         self.calendarTitle = QLabel("<font color='white'>Today's Events</font>")
         self.calendarTitle.setFont(self.titleFont)
         self.calendarTitle.setAlignment(Qt.AlignCenter)
-        self.titleBox.addWidget(self.calendarTitle)
-        self.contentBox.addLayout(self.titleBox)
+        self.calendarRows.addRow(self.calendarTitle)
 
-        self.calendarRows = QFormLayout()
-        self.calendarRows.setVerticalSpacing(20)
-        self.calendarRows.setHorizontalSpacing(25)
-        self.calendarRows.setAlignment(Qt.AlignLeft)
-        self.contentBox.addLayout(self.calendarRows)
-
-        # Empty placeholder box to have the calendar align itself to the left of the screen
-        self.dummyBox = QVBoxLayout()
-        self.dummyBox.setAlignment(Qt.AlignRight)
-
-        self.calendarBox.addLayout(self.contentBox)
-        self.calendarBox.addStretch(1)
-        self.calendarBox.addLayout(self.dummyBox)
-
-        self.setLayout(self.calendarBox)
+        self.setLayout(self.calendarRows)
 
         self.getDailyEvents()
-        # TODO get updates
+        self.updateDailyEvents()
+
+    def updateDailyEvents(self):
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.getDailyEvents)
+        self.timer.start(1000 * 60 * 60)  # Update calendar every hour
 
     def getDailyEvents(self):
         # Creates a Google Calendar API service object gets the daily meetings for someone (max is 10)
@@ -68,8 +63,7 @@ class Calendar(QWidget):
         service = discovery.build('calendar', 'v3', http=http)
 
         now = datetime.datetime.now().isoformat() + 'Z' # 'Z' indicates UTC
-        eventsResult = service.events().list(
-            calendarId='primary', timeMin=now, maxResults=10, singleEvents=True, orderBy='startTime').execute()
+        eventsResult = service.events().list(calendarId='primary', timeMin=now, maxResults=10, singleEvents=True, orderBy='startTime').execute()
         events = eventsResult.get('items', [])
 
         curr_date = time.strftime("%d")
@@ -83,9 +77,11 @@ class Calendar(QWidget):
             relaxLabel = QLabel("<font color='white'>Time to Relax!</font>")
             relaxLabel.setAlignment(Qt.AlignCenter)
             noEventsLabel = QLabel("<font color='white'>No scheduled events today.</font>")
+            noEventsLabel.setAlignment(Qt.AlignCenter)
             relaxLabel.setFont(self.contentFont)
             noEventsLabel.setFont(self.contentFont)
-            self.calendarRows.addRow(relaxLabel, noEventsLabel)
+            self.calendarRows.addRow(relaxLabel)
+            self.calendarRows.addRow(noEventsLabel)
 
         else:
             for event in events:
@@ -100,7 +96,7 @@ class Calendar(QWidget):
                     newEventName = QLabel("<font color='white'>" + eventName + "</font>")
                     newEventName.setFixedWidth(300)
                     newEventName.setWordWrap(True)
-                    newEventName.setAlignment(Qt.AlignLeft)
+                    newEventName.setAlignment(Qt.AlignCenter)
                     newEventTime = QLabel("<font color='white'>" + eventStart + " - " + eventEnd + "</font>")
                     newEventName.setFont(self.contentFont)
                     newEventTime.setFont(self.contentFont)
