@@ -1,13 +1,14 @@
-# smartMirror
+# MirrorX
 
 ![platform](https://img.shields.io/badge/python-3.4-green.svg)
 
 ## Features
- * Weather  
+ * Facial Recognition through Microsoft Cognitive Services
+ * Weather 
+ * Major News Headlines
  * Daily meetings from Google Calendar
  * Current time/date
- * Randomized Motivational Quote Generation
- * Face Recognition through Microsoft Cognitive Services
+ * Motivational Quote pulled from the Internet
 
 ### Required python packages
 1.  opencv2
