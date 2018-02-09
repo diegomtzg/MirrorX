@@ -1,7 +1,7 @@
 # MirrorX
 
 ![platform](https://img.shields.io/badge/python-3.4-green.svg)
-![alt text](https://raw.githubusercontent.com/diegomtzg/MirrorX/final_result.jpg)
+![Screenshot](final_result.png)
 
 ## Features
  * Facial Recognition through Microsoft Cognitive Services
