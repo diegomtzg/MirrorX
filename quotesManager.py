@@ -45,7 +45,7 @@ class Quotes(QWidget):
     def updateQuotes(self):
             self.timer = QTimer(self)
             self.timer.timeout.connect(self.quotes_get)
-            self.timer.start(1000 * 60 * 10)  # Update quote every 10 minutes
+            self.timer.start(1000 * 60 * 2)  # Update quote every 2 minutes
 
     def quotes_get(self):
         try:
@@ -61,10 +61,15 @@ class Quotes(QWidget):
             if len(quote) > 80:
                 (quote, author) = QUOTES[np.random.randint(len(QUOTES))]
 
-            # Get rid of quotes with weird characters in them
+            # Get rid of quotes and authors with weird characters in them
             for i in range (0, len(quote)):
                 asciiVal = ord(quote[i])
                 if(asciiVal > 126 or asciiVal < 32):
+                    (quote, author) = QUOTES[np.random.randint(len(QUOTES))]
+
+            for i in range(0, len(author)):
+                asciiVal = ord(author[i])
+                if (asciiVal > 126 or asciiVal < 32):
                     (quote, author) = QUOTES[np.random.randint(len(QUOTES))]
 
             # Get rid of all trailing white space and random quotes placed by shady quote API service

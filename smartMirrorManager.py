@@ -14,7 +14,7 @@ small_fontsize = 12
 med_fontsize = 26
 large_fontsize = 32
 xlarge_fontsize = 70
-title_fontsize = 50
+title_fontsize = 40
 
 global smartMirrorApp
 
@@ -40,16 +40,15 @@ class mainUI():
         self.qt.setPalette(self.darkPalette)
 
         self.qt.weatherClockHBox = QHBoxLayout()
-        self.qt.calendarHBox = QHBoxLayout()
-        self.qt.newsHBox = QHBoxLayout()
+        self.qt.calendarNewsHBox = QHBoxLayout()
         self.qt.welcomeHBox = QHBoxLayout()
         self.qt.quotesHBox = QHBoxLayout()
 
         self.qt.verticalMirrorBox = QVBoxLayout()
         self.qt.verticalMirrorBox.addLayout(self.qt.weatherClockHBox)
-        self.qt.verticalMirrorBox.addLayout(self.qt.calendarHBox)
+        # self.qt.verticalMirrorBox.addStretch(10) Uncomment to make news and calendar go to bottom of mirror
+        self.qt.verticalMirrorBox.addLayout(self.qt.calendarNewsHBox)
         self.qt.verticalMirrorBox.addStretch(1)
-        self.qt.verticalMirrorBox.addLayout(self.qt.newsHBox)
         self.qt.verticalMirrorBox.addLayout(self.qt.welcomeHBox)
         self.qt.verticalMirrorBox.addLayout(self.qt.quotesHBox)
 
@@ -71,7 +70,6 @@ class mainUI():
     def updateWidgets(self):
         global PERSON_NAME, PERSON_ID, STARTED
         if not STARTED and PERSON_NAME != "" and PERSON_ID != "":
-
             # Add clock/date and weather widgets
             self.qt.clock = timeManager.DateAndTime()
             self.qt.weather = weatherManager.Weather()
@@ -79,15 +77,19 @@ class mainUI():
             self.qt.news = newsManager.News()
 
             self.qt.clock.setFixedHeight(300)
-            self.qt.weather.setFixedSize(400, 300)
+            self.qt.weather.setFixedSize(580, 300)
+            self.qt.news.setFixedWidth(360)
+            self.qt.calendar.setFixedWidth(300)
+
+            dummyLabel = QLabel()
+            dummyLabel.setFixedWidth(350)
 
             # Add weather, calendar and clock widgets
             self.qt.weatherClockHBox.addWidget(self.qt.weather)
             self.qt.weatherClockHBox.addWidget(self.qt.clock)
-            self.qt.calendarHBox.addWidget(self.qt.calendar)
-
-            # Add news widget
-            self.qt.newsHBox.addWidget(self.qt.news)
+            self.qt.calendarNewsHBox.addWidget(self.qt.news)
+            self.qt.calendarNewsHBox.addWidget(dummyLabel)  # For spacing
+            self.qt.calendarNewsHBox.addWidget(self.qt.calendar)
 
             # Add welcome message
             font = QFont('Helvetica', xlarge_fontsize)
@@ -105,8 +107,7 @@ class mainUI():
 
         if STARTED and PERSON_NAME == "" and PERSON_ID == "":
             mainUI.clearLayout(self.qt.weatherClockHBox)
-            mainUI.clearLayout(self.qt.calendarHBox)
-            mainUI.clearLayout(self.qt.newsHBox)
+            mainUI.clearLayout(self.qt.calendarNewsHBox)
             mainUI.clearLayout(self.qt.quotesHBox)
             mainUI.clearLayout(self.qt.welcomeHBox)
 
@@ -176,7 +177,7 @@ def faceGoneAndRestart():
     global PERSON_NAME, PERSON_ID, cam, imgPath
 
     num_count = 0
-    while(num_count < 100):
+    while(num_count < 10):
         time.sleep(0.5)
         success, image = cam.read()
         if not success: continue
