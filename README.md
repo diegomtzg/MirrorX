@@ -1,8 +1,6 @@
 # MirrorX
 
 ![platform](https://img.shields.io/badge/python-3.4-green.svg)
-![platform](https://img.shields.io/badge/license-MIT%20License-blue.svg)
-![platform](https://img.shields.io/badge/project%20category-iot-brightgreen.svg)
 
 ## Features
  * Facial Recognition through Microsoft Cognitive Services
@@ -19,4 +17,4 @@
 4.  speech_recognition
 
 ## MirrorX Final Result
-![MirrorX](/images/finalResult.jpg "MirrorX") 
+![MirrorX](../master/images/finalResult.jpg) 
