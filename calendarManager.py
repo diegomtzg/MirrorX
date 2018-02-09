@@ -37,8 +37,8 @@ class Calendar(QWidget):
         self.contentFont = QFont('Helvetica', 20)
 
         self.calendarRows = QFormLayout()
-        self.calendarRows.setVerticalSpacing(20)
-        self.calendarRows.setHorizontalSpacing(20)
+        self.calendarRows.setVerticalSpacing(15)
+        self.calendarRows.setHorizontalSpacing(40)
 
         self.calendarTitle = QLabel("<font color='white'>Today's Events</font>")
         self.calendarTitle.setFont(self.titleFont)
@@ -91,11 +91,13 @@ class Calendar(QWidget):
 
                     newEventName = QLabel("<font color='white'>" + eventName + "</font>")
                     newEventName.setWordWrap(True)
-                    newEventName.setAlignment(Qt.AlignCenter)
+                    newEventName.setAlignment(Qt.AlignRight)
+                    newEventName.setFixedWidth(150)
                     newEventTime = QLabel("<font color='white'>" + eventStart + "</font>")
                     newEventName.setFont(self.contentFont)
                     newEventTime.setFont(self.contentFont)
-                    self.calendarRows.addRow(newEventName, newEventTime)
+                    newEventTime.setAlignment(Qt.AlignRight)
+                    self.calendarRows.addRow(newEventTime, newEventName)
 
 
     def get_credentials(self):

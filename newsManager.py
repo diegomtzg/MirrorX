@@ -12,7 +12,7 @@ APPLICATION_NAME = 'MirrorX'
 
 NEWS_API_KEY = "3e115fc75b1744a685b212b8b66acf6a" # From newsapi.org
 NEWS_SOURCE = "abc-news,the-wall-street-journal" # From https://newsapi.org/sources
-MAX_HEADLINES = 5
+MAX_HEADLINES = 8
 
 class News(QWidget):
     def __init__(self):
@@ -28,13 +28,13 @@ class News(QWidget):
 
         self.newsTitle = QLabel("<font color='white'>Today's Headlines</font>")
         self.newsTitle.setFont(self.titleFont)
-        self.newsTitle.setAlignment(Qt.AlignCenter)
+        self.newsTitle.setAlignment(Qt.AlignJustify)
 
         self.newsTitleBox.addWidget(self.newsTitle)
         self.newsContentBox.addLayout(self.newsTitleBox)
 
         self.newsRows = QFormLayout()
-        self.newsRows.setVerticalSpacing(20)
+        self.newsRows.setVerticalSpacing(30)
         self.newsRows.setAlignment(Qt.AlignLeft)
         self.newsContentBox.addLayout(self.newsRows)
 
@@ -49,18 +49,20 @@ class News(QWidget):
         self.timer.start(1000 * 60 * 10)  # Update news every 10 minutes
 
     def getNews(self):
-        news_req_url = "https://newsapi.org/v2/top-headlines?sources=%s&apiKey=%s" % (NEWS_SOURCE, NEWS_API_KEY)
+        news_req_url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=%s" % (NEWS_API_KEY)
         response = requests.get(news_req_url)
         news_json = json.loads(response.text)
 
         for i in range(0, MAX_HEADLINES):
             headline = news_json['articles'][i]['title']
+            source = news_json['articles'][i]['source']['name']
+            source = source.rstrip(".com")
 
             if headline[-1] != '?':
                 headline =  headline + "."
 
-            newHeadline = QLabel("<font color='white'>• " + headline + "</font>")
+            newHeadline = QLabel("<font color='white'>– " + source + ": \"" + headline + "\"</font>")
             newHeadline.setWordWrap(QFormLayout.WrapAllRows)
-            newHeadline.setAlignment(Qt.AlignCenter)
+            newHeadline.setAlignment(Qt.AlignLeft)
             newHeadline.setFont(self.newsContentFont)
             self.newsRows.addRow(newHeadline)
