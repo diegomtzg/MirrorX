@@ -24,7 +24,7 @@ except ImportError:
     flags = None
 
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
-CLIENT_SECRET_FILE = 'client_secret.json'
+global CLIENT_SECRET_FILE
 APPLICATION_NAME = 'MirrorX'
 
 class Calendar(QWidget):
