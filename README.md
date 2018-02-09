@@ -2,7 +2,7 @@
 
 ![platform](https://img.shields.io/badge/python-3.4-green.svg)
 
-## Features
+### Features
  * Facial Recognition through Microsoft Cognitive Services
  * Weather 
  * Major News Headlines
@@ -16,5 +16,5 @@
 3.  PyQt5
 4.  speech_recognition
 
-## MirrorX Final Result
+### MirrorX Final Result
 ![MirrorX](../master/images/finalResult.jpg) 
