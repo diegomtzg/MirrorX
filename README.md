@@ -15,3 +15,6 @@
 2.  pyaudio2
 3.  PyQt5
 4.  speech_recognition
+
+## MirrorX Final Result
+![MirrorX](../master/images/finalResult.jpg) 
