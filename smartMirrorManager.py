@@ -168,6 +168,8 @@ def findFaceAndSetName():
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
 
+    calendarManager.CLIENT_SECRET_FILE = "json_files/" + PERSON_NAME + ".json"
+
     faceGoneAndRestart()
 
 def faceGoneAndRestart():
