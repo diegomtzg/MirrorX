@@ -46,9 +46,16 @@ class News(QWidget):
     def updateNews(self):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.getNews)
-        self.timer.start(1000 * 60 * 10)  # Update news every 10 minutes
+        self.timer.start(1000 * 60 * 30)  # Update news every 30 minutes
 
     def getNews(self):
+        # Remove current rows so that new rows don't get added to previous rows, but replace them instead
+        self.newsRows.deleteLater()
+        self.newsRows = QFormLayout()
+        self.newsRows.setVerticalSpacing(30)
+        self.newsRows.setAlignment(Qt.AlignLeft)
+        self.newsContentBox.addLayout(self.newsRows)
+
         news_req_url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=%s" % (NEWS_API_KEY)
         response = requests.get(news_req_url)
         news_json = json.loads(response.text)
