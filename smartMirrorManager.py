@@ -18,9 +18,7 @@ title_fontsize = 40
 
 global smartMirrorApp
 
-PERSON_NAME = ""
-PERSON_ID = ""
-STARTED = False
+PERSON_NAME = "Diego"
 
 class mainUI():
     def __init__(self):
@@ -53,65 +51,41 @@ class mainUI():
         self.qt.verticalMirrorBox.addLayout(self.qt.quotesHBox)
 
         self.qt.setLayout(self.qt.verticalMirrorBox)
-        self.update_check()
 
-    def update_check(self):
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.updateWidgets)
-        self.timer.start(1000)
+        calendarManager.CLIENT_SECRET_FILE = "json_files/" + PERSON_NAME + ".json"
 
-    @staticmethod
-    def clearLayout(layout):
-        for i in reversed(range(layout.count())): 
-            widget = layout.itemAt(i).widget()
-            if widget != None:
-                widget.deleteLater()
+        # Add clock/date and weather widgets
+        self.qt.clock = timeManager.DateAndTime()
+        self.qt.weather = weatherManager.Weather()
+        self.qt.calendar = calendarManager.Calendar()
+        self.qt.news = newsManager.News()
 
-    def updateWidgets(self):
-        global PERSON_NAME, PERSON_ID, STARTED
-        if not STARTED and PERSON_NAME != "" and PERSON_ID != "":
-            # Add clock/date and weather widgets
-            self.qt.clock = timeManager.DateAndTime()
-            self.qt.weather = weatherManager.Weather()
-            self.qt.calendar = calendarManager.Calendar()
-            self.qt.news = newsManager.News()
+        self.qt.clock.setFixedHeight(300)
+        self.qt.weather.setFixedSize(580, 300)
+        self.qt.news.setFixedWidth(360)
+        self.qt.calendar.setFixedWidth(300)
 
-            self.qt.clock.setFixedHeight(300)
-            self.qt.weather.setFixedSize(580, 300)
-            self.qt.news.setFixedWidth(360)
-            self.qt.calendar.setFixedWidth(300)
+        dummyLabel = QLabel()
+        dummyLabel.setFixedWidth(350)
 
-            dummyLabel = QLabel()
-            dummyLabel.setFixedWidth(350)
+        # Add weather, calendar and clock widgets
+        self.qt.weatherClockHBox.addWidget(self.qt.weather)
+        self.qt.weatherClockHBox.addWidget(self.qt.clock)
+        self.qt.calendarNewsHBox.addWidget(self.qt.news)
+        self.qt.calendarNewsHBox.addWidget(dummyLabel)  # For spacing
+        self.qt.calendarNewsHBox.addWidget(self.qt.calendar)
 
-            # Add weather, calendar and clock widgets
-            self.qt.weatherClockHBox.addWidget(self.qt.weather)
-            self.qt.weatherClockHBox.addWidget(self.qt.clock)
-            self.qt.calendarNewsHBox.addWidget(self.qt.news)
-            self.qt.calendarNewsHBox.addWidget(dummyLabel)  # For spacing
-            self.qt.calendarNewsHBox.addWidget(self.qt.calendar)
+        # Add welcome message
+        font = QFont('Helvetica', xlarge_fontsize)
+        self.message = QLabel()
+        self.message.setAlignment(Qt.AlignCenter)
+        self.message.setFont(font)
+        self.qt.welcomeHBox.addWidget(self.message)
+        self.message.setText("<font color='white'>" + "Welcome, " + PERSON_NAME + "</font>")
 
-            # Add welcome message
-            font = QFont('Helvetica', xlarge_fontsize)
-            self.message = QLabel()
-            self.message.setAlignment(Qt.AlignCenter)
-            self.message.setFont(font)
-            self.qt.welcomeHBox.addWidget(self.message)
-            self.message.setText("<font color='white'>" + "Welcome, " + PERSON_NAME + "</font>")
-
-            # Add quotes widget
-            self.qt.quotes = quotesManager.Quotes(QWidget())
-            self.qt.quotesHBox.addWidget(self.qt.quotes)
-
-            STARTED = True
-
-        if STARTED and PERSON_NAME == "" and PERSON_ID == "":
-            mainUI.clearLayout(self.qt.weatherClockHBox)
-            mainUI.clearLayout(self.qt.calendarNewsHBox)
-            mainUI.clearLayout(self.qt.quotesHBox)
-            mainUI.clearLayout(self.qt.welcomeHBox)
-
-            STARTED = False
+        # Add quotes widget
+        self.qt.quotes = quotesManager.Quotes(QWidget())
+        self.qt.quotesHBox.addWidget(self.qt.quotes)
 
 
 # idk how this all really works but hey at least we can quit the app by clicking 'q'
@@ -168,8 +142,6 @@ def findFaceAndSetName():
     PERSON_NAME = name['name']
     PERSON_ID = res[0]
 
-    calendarManager.CLIENT_SECRET_FILE = "json_files/" + PERSON_NAME + ".json"
-
     faceGoneAndRestart()
 
 def faceGoneAndRestart():
@@ -210,15 +182,10 @@ def start_qt():
     window = mainUI()  # Create application window 
 
 if __name__ == '__main__':
-    import threading as T
     import cv2
-
-    cam = cv2.VideoCapture(0) # TODO change to 1 for webcam
-    imgPath = 'data/mostRecentFace.jpg'
 
     smartMirrorApp = QApplication(sys.argv)  # Create application (runnable from command line)
     window = mainUI()  # Create application window  
-    T.Thread(target=initializeLogin).start()
 
     sys.exit(smartMirrorApp.exec_())  # Ensure clean app exit
 
