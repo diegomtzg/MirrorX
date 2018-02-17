@@ -84,4 +84,4 @@ class Quotes(QWidget):
         except Exception as e:
             (quote, author) = QUOTES[np.random.randint(len(QUOTES))]
             self.lbl1.setText("<font color='white'>\"" + quote + "\"</font>")
-            self.lbl2.setText("<font color='white'>–" + author + "</font>")
+            self.lbl2.setText("<font color='white'>-" + author + "</font>")
