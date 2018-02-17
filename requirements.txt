@@ -2,3 +2,4 @@ opencv-python
 pyqt5
 pyaudio2
 cognitive_face
+google-api-python-client

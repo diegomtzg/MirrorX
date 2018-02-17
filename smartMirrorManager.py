@@ -53,23 +53,16 @@ class mainUI():
         self.qt.verticalMirrorBox.addLayout(self.qt.quotesHBox)
 
         self.qt.setLayout(self.qt.verticalMirrorBox)
-        self.update_check()
-
-    def update_check(self):
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.updateWidgets)
-        self.timer.start(1000)
+        self.addWidgets()
 
     @staticmethod
     def clearLayout(layout):
-        for i in reversed(range(layout.count())): 
+        for i in reversed(range(layout.count())):
             widget = layout.itemAt(i).widget()
             if widget != None:
                 widget.deleteLater()
 
-    def updateWidgets(self):
-        global PERSON_NAME, PERSON_ID, STARTED
-        if not STARTED and PERSON_NAME != "" and PERSON_ID != "":
+    def addWidgets(self):
             # Add clock/date and weather widgets
             self.qt.clock = timeManager.DateAndTime()
             self.qt.weather = weatherManager.Weather()
@@ -103,16 +96,6 @@ class mainUI():
             self.qt.quotes = quotesManager.Quotes(QWidget())
             self.qt.quotesHBox.addWidget(self.qt.quotes)
 
-            STARTED = True
-
-        if STARTED and PERSON_NAME == "" and PERSON_ID == "":
-            mainUI.clearLayout(self.qt.weatherClockHBox)
-            mainUI.clearLayout(self.qt.calendarNewsHBox)
-            mainUI.clearLayout(self.qt.quotesHBox)
-            mainUI.clearLayout(self.qt.welcomeHBox)
-
-            STARTED = False
-
 
 # idk how this all really works but hey at least we can quit the app by clicking 'q'
 class QKeyFilter(QObject):
@@ -127,98 +110,16 @@ class QKeyFilter(QObject):
         return False
 
 
-def waitToScanFace(MAGIC_PHRASE):
-    import speech_recognition as sr
-    r = sr.Recognizer() # obtain audio from the microphone
-    with sr.Microphone() as source:
-        print("Say something!")
-        r.adjust_for_ambient_noise(source, duration=2)
-        while(True):
-            try:
-                audio = r.listen(source, phrase_time_limit=10)
-                recognized = r.recognize_google(audio).lower()
-                print(recognized)
-                if MAGIC_PHRASE.lower() in recognized:
-                    break
-            except sr.UnknownValueError:
-                print("Google failed to recognize")
-            except sr.WaitTimeoutError:
-                print("Re-listening due to time limit")
-        print("Success! Magic phrase recognized")
-
-
-def findFaceAndSetName():
-    from facial_recognition import identifyPersonInImage, getPerson
-    import time
-
-    global PERSON_NAME, PERSON_ID, cam, imgPath
-
-    while(True):
-        time.sleep(0.5)
-        success, image = cam.read()
-        if not success: continue
-        cv2.imwrite(imgPath, image)
-        res = identifyPersonInImage(imgPath)
-        print(res)
-        if (len(res) == 1): # Must only have one face
-            name = getPerson(res[0])
-            print("Identified %s" % name['name'])
-            break
-
-    PERSON_NAME = name['name']
-    PERSON_ID = res[0]
-
-    calendarManager.CLIENT_SECRET_FILE = "json_files/" + PERSON_NAME + ".json"
-
-    faceGoneAndRestart()
-
-def faceGoneAndRestart():
-    from facial_recognition import identifyPersonInImage, getPerson
-    import time
-
-    global PERSON_NAME, PERSON_ID, cam, imgPath
-
-    num_count = 0
-    while(num_count < 10):
-        time.sleep(0.5)
-        success, image = cam.read()
-        if not success: continue
-        cv2.imwrite(imgPath, image)
-        res = identifyPersonInImage(imgPath)
-        if (len(res) == 0 or PERSON_ID not in res): # must only have one face
-            print("Identified no face of %s! Count %d " % (PERSON_NAME, num_count))
-            num_count += 1
-        else:
-            print("Identified %s with ID %s" % (PERSON_NAME, PERSON_ID))
-            num_count = 0
-
-    PERSON_NAME = ""
-    PERSON_ID = ""
-
-    time.sleep(2)
-    findFaceAndSetName()
-
-
-def initializeLogin():
-    # waitToScanFace("mirror")
-    findFaceAndSetName()
-
-
 def start_qt():
     global smartMirrorApp
     smartMirrorApp = QApplication(sys.argv)  # Create application (runnable from command line)
     window = mainUI()  # Create application window 
 
 if __name__ == '__main__':
-    import threading as T
     import cv2
 
-    cam = cv2.VideoCapture(0) # TODO change to 1 for webcam
-    imgPath = 'data/mostRecentFace.jpg'
-
     smartMirrorApp = QApplication(sys.argv)  # Create application (runnable from command line)
-    window = mainUI()  # Create application window  
-    T.Thread(target=initializeLogin).start()
+    window = mainUI()  # Create application window
 
     sys.exit(smartMirrorApp.exec_())  # Ensure clean app exit
 

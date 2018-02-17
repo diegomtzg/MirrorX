@@ -68,7 +68,7 @@ class News(QWidget):
             if headline[-1] != '?':
                 headline =  headline + "."
 
-            newHeadline = QLabel("<font color='white'>– " + source + ": \"" + headline + "\"</font>")
+            newHeadline = QLabel("<font color='white'>- " + source + ": \"" + headline + "\"</font>")
             newHeadline.setWordWrap(QFormLayout.WrapAllRows)
             newHeadline.setAlignment(Qt.AlignLeft)
             newHeadline.setFont(self.newsContentFont)
