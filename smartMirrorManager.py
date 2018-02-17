@@ -9,18 +9,23 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLay
 from PyQt5.QtGui import QFont, QPalette
 from PyQt5.QtCore import *
 
-# Constants
-small_fontsize = 12
-med_fontsize = 26
-large_fontsize = 32
-xlarge_fontsize = 70
-title_fontsize = 40
+# Constants for desktop version
+# small_fontsize = 12
+# med_fontsize = 26
+# large_fontsize = 32
+# xlarge_fontsize = 70
+# title_fontsize = 40
+
+# Constants for Raspberry pi Version
+small_fontsize = 10
+med_fontsize = 20
+large_fontsize = 26
+xlarge_fontsize = 50
+title_fontsize = 30
 
 global smartMirrorApp
 
 PERSON_NAME = ""
-PERSON_ID = ""
-STARTED = False
 
 class mainUI():
     def __init__(self):

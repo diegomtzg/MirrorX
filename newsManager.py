@@ -7,12 +7,11 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
-CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'MirrorX'
 
 NEWS_API_KEY = "3e115fc75b1744a685b212b8b66acf6a" # From newsapi.org
 NEWS_SOURCE = "abc-news,the-wall-street-journal" # From https://newsapi.org/sources
-MAX_HEADLINES = 8
+MAX_HEADLINES = 5
 
 class News(QWidget):
     def __init__(self):
@@ -21,7 +20,7 @@ class News(QWidget):
 
     def initUI(self):
         self.titleFont = QFont('Helvetica', smartMirrorManager.title_fontsize)
-        self.newsContentFont = QFont('Helvetica', 20)
+        self.newsContentFont = QFont('Helvetica', smartMirrorManager.med_fontsize)
 
         self.newsTitleBox = QHBoxLayout()
         self.newsContentBox = QVBoxLayout() # News headlines + title

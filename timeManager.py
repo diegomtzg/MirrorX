@@ -13,7 +13,7 @@ class DateAndTime(QWidget):
 
     def initUI(self):
         font1 = QFont('Helvetica', smartMirrorManager.large_fontsize)
-        font2 = QFont('Helvetica', 60)
+        font2 = QFont('Helvetica', smartMirrorManager.xlarge_fontsize)
 
         self.vbox = QVBoxLayout()
         self.time = ''
@@ -41,7 +41,7 @@ class DateAndTime(QWidget):
         self.setContentsMargins(0,0,0,0)
         self.setLayout(self.vbox)
 
-        self.updateTime()
+         self.updateTime()
 
     def updateTime(self):
         global ticker
