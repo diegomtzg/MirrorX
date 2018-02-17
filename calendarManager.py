@@ -24,7 +24,7 @@ except ImportError:
     flags = None
 
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
-global CLIENT_SECRET_FILE
+CLIENT_SECRET_FILE = "json_files/" + "Diego" + ".json"
 APPLICATION_NAME = 'MirrorX'
 
 class Calendar(QWidget):
@@ -65,10 +65,15 @@ class Calendar(QWidget):
         events = eventsResult.get('items', [])
 
         curr_date = time.strftime("%d")
+        curr_month = time.strftime("%m")
+        curr_year = time.strftime("%Y")
         num_events_today = 0
+
         for event in events:
             event_date = dateutil.parser.parse(event['start'].get('dateTime', event['start'].get('date'))).strftime("%d")
-            if (curr_date == event_date):
+            event_month = dateutil.parser.parse(event['start'].get('dateTime', event['start'].get('date'))).strftime("%m")
+            event_year = dateutil.parser.parse(event['start'].get('dateTime', event['start'].get('date'))).strftime("%Y")
+            if (curr_date == event_date and curr_month == event_month and curr_year == event_year):
                 num_events_today = num_events_today + 1
 
         if not events or num_events_today == 0:
@@ -84,7 +89,7 @@ class Calendar(QWidget):
                 event_date = dateutil.parser.parse(event['start'].get('dateTime', event['start'].get('date'))).strftime("%d")
 
                 # Retrieved event may be for next day, ensure that it is today
-                if(curr_date == event_date):
+                if (curr_date == event_date and curr_month == event_month and curr_year == event_year):
                     eventStart = dateutil.parser.parse(event['start'].get('dateTime', event['start'].get('date'))).strftime("%I:%M %p").lstrip('0')
                     eventEnd = dateutil.parser.parse(event['end'].get('dateTime', event['end'].get('date'))).strftime("%I:%M %p").lstrip('0')
                     eventName = event['summary']
