@@ -3,6 +3,7 @@ import weatherManager
 import timeManager
 import quotesManager
 import newsManager
+import messageManager
 
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QHBoxLayout
@@ -25,8 +26,10 @@ title_fontsize = 30
 
 global smartMirrorApp
 global timeOfDay
+global PERSON_NAME
 
-PERSON_NAME = ""
+PERSON_NAME = "Diego"
+timeOfDay = "AM"
 
 class mainUI():
     def __init__(self):
@@ -74,6 +77,7 @@ class mainUI():
             self.qt.weather = weatherManager.Weather()
             self.qt.calendar = calendarManager.Calendar()
             self.qt.news = newsManager.News()
+            self.qt.message = messageManager.Message()
 
             self.qt.clock.setFixedHeight(300)
             self.qt.weather.setFixedSize(580, 300)
@@ -83,27 +87,13 @@ class mainUI():
             dummyLabel = QLabel()
             dummyLabel.setFixedWidth(340)
 
-            # Add weather, calendar and clock widgets
+            # Add weather, calendar, message and clock widgets
             self.qt.weatherClockHBox.addWidget(self.qt.weather)
             self.qt.weatherClockHBox.addWidget(self.qt.clock)
             self.qt.calendarNewsHBox.addWidget(self.qt.news)
             self.qt.calendarNewsHBox.addWidget(dummyLabel)  # For spacing
             self.qt.calendarNewsHBox.addWidget(self.qt.calendar)
-
-            # Add welcome message
-            message = ''
-            font = QFont('Helvetica', xlarge_fontsize)
-            self.message = QLabel()
-            self.message.setAlignment(Qt.AlignCenter)
-            self.message.setFont(font)
-            self.qt.welcomeHBox.addWidget(self.message)
-
-            if timeOfDay == "PM":
-                message = "Good Morning, "
-            elif timeOfDay == "AM":
-                message = "Good Afternoon, "
-
-            self.message.setText("<font color='white'>" + message + PERSON_NAME + "</font>")
+            self.qt.welcomeHBox.addWidget(self.qt.message)
 
             # Add quotes widget
             self.qt.quotes = quotesManager.Quotes(QWidget())
