@@ -29,7 +29,7 @@ global timeOfDay
 global PERSON_NAME
 
 PERSON_NAME = "Diego"
-timeOfDay = "AM"
+timeOfDay = "am"
 
 class mainUI():
     def __init__(self):
@@ -85,7 +85,7 @@ class mainUI():
             self.qt.calendar.setFixedWidth(300)
 
             dummyLabel = QLabel()
-            dummyLabel.setFixedWidth(340)
+            dummyLabel.setFixedWidth(330)
 
             # Add weather, calendar, message and clock widgets
             self.qt.weatherClockHBox.addWidget(self.qt.weather)

@@ -28,9 +28,9 @@ class Message(QWidget):
         self.timer.start(1000 * 60 * 0.01)  # Update message every tenth of a second (to get it correct at startup)
 
     def getMessage(self):
-        if smartMirrorManager.timeOfDay == "PM":
+        if smartMirrorManager.timeOfDay == "pm":
             message = "Good Afternoon, " + smartMirrorManager.PERSON_NAME
-        elif smartMirrorManager.timeOfDay == "AM":
+        elif smartMirrorManager.timeOfDay == "am":
             message = "Good Morning, " + smartMirrorManager.PERSON_NAME
 
         self.message.setText("<font color='white'>" + message + "</font>")
