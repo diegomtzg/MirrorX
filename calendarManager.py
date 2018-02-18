@@ -52,9 +52,11 @@ class Calendar(QWidget):
     def updateDailyEvents(self):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.getDailyEvents)
-        self.timer.start(1000 * 60 * 0.01)  # Update calendar every hour
+        self.timer.start(1000 * 60 * 60)  # Update calendar every hour
 
     def getDailyEvents(self):
+        smartMirrorManager.mainUI.clearLayout(self.calendarRows)
+
         # Creates a Google Calendar API service object gets the daily meetings for someone (max is 10)
         credentials = self.get_credentials()
         http = credentials.authorize(httplib2.Http())

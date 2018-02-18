@@ -99,7 +99,6 @@ class mainUI():
             self.qt.quotes = quotesManager.Quotes(QWidget())
             self.qt.quotesHBox.addWidget(self.qt.quotes)
 
-
 # idk how this all really works but hey at least we can quit the app by clicking 'q'
 class QKeyFilter(QObject):
     qKeyPressed = pyqtSignal()
@@ -107,7 +106,6 @@ class QKeyFilter(QObject):
     def eventFilter(self, obj, event):
         if event.type() == QEvent.KeyPress:
             if event.key() == Qt.Key_Q:
-                cam.release()
                 cv2.destroyAllWindows()
                 sys.exit(smartMirrorApp.exec_())
         return False

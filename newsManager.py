@@ -48,6 +48,8 @@ class News(QWidget):
         self.timer.start(1000 * 60 * 30)  # Update news every 30 minutes
 
     def getNews(self):
+        smartMirrorManager.mainUI.clearLayout(self.newsContentBox)
+
         # Remove current rows so that new rows don't get added to previous rows, but replace them instead
         self.newsRows.deleteLater()
         self.newsRows = QFormLayout()
