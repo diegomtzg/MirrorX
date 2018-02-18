@@ -41,7 +41,7 @@ class DateAndTime(QWidget):
         self.setContentsMargins(0,0,0,0)
         self.setLayout(self.vbox)
 
-         self.updateTime()
+        self.updateTime()
 
     def updateTime(self):
         global ticker
@@ -53,6 +53,7 @@ class DateAndTime(QWidget):
 
     def tick(self):
         global ticker
+        smartMirrorManager.timeOfDay = time.strftime("%p")
 
         # Make ticker flash in clock
         if(ticker):

@@ -24,6 +24,7 @@ xlarge_fontsize = 50
 title_fontsize = 30
 
 global smartMirrorApp
+global timeOfDay
 
 PERSON_NAME = ""
 
@@ -80,7 +81,7 @@ class mainUI():
             self.qt.calendar.setFixedWidth(300)
 
             dummyLabel = QLabel()
-            dummyLabel.setFixedWidth(350)
+            dummyLabel.setFixedWidth(340)
 
             # Add weather, calendar and clock widgets
             self.qt.weatherClockHBox.addWidget(self.qt.weather)
@@ -90,12 +91,19 @@ class mainUI():
             self.qt.calendarNewsHBox.addWidget(self.qt.calendar)
 
             # Add welcome message
+            message = ''
             font = QFont('Helvetica', xlarge_fontsize)
             self.message = QLabel()
             self.message.setAlignment(Qt.AlignCenter)
             self.message.setFont(font)
             self.qt.welcomeHBox.addWidget(self.message)
-            self.message.setText("<font color='white'>" + "Welcome, " + PERSON_NAME + "</font>")
+
+            if timeOfDay == "PM":
+                message = "Good Morning, "
+            elif timeOfDay == "AM":
+                message = "Good Afternoon, "
+
+            self.message.setText("<font color='white'>" + message + PERSON_NAME + "</font>")
 
             # Add quotes widget
             self.qt.quotes = quotesManager.Quotes(QWidget())
